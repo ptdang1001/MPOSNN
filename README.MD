@@ -104,9 +104,9 @@ options:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
 2. Adjacency matrix a factor graph, 
-   1:="The parent node(compound) of a reaction(M_i).", 
-   -1:="The child node(compound) of a reaction(M_i)", 
-   0:="No connection bewteen compound and reaction". 
+   - 1:="The parent node(compound) of a reaction(M_i).", 
+   - -1:="The child node(compound) of a reaction(M_i)", 
+   - 0:="No connection bewteen compound and reaction". 
 3. Modules(Reactions) and contained genes.
 
 ** Outputs:
