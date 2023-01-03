@@ -35,6 +35,7 @@ from utils.data_interface import save_CycleCollapsed_factors_nodes
 from utils.data_interface import remove_outside_compounds
 from utils.data_interface import remove_grad_files
 from utils.data_interface import save_snn_model_weights
+from utils.data_interface import save_grad_file  
 
 
 from scFEA.src.scFEA import scFEA
@@ -78,7 +79,7 @@ def main(args):
     if len(cycles_in_graph)>0:
         BDG,compounds_modules=save_CycleCollapsed_factors_nodes(compounds_modules,BDG,cycles_in_graph,args)
     else:
-        print("\n Non Cycle! \n")
+        print("\n No Cycle! \n")
     compounds_modules = remove_outside_compounds(compounds_modules)
     
     #sys.exit()
@@ -114,11 +115,11 @@ def main(args):
         #print("\n samples_modules_snn:\n {0} \n".format(samples_modules_snn))
         
         # 2nd step to improve the initial values by Massage Passing Optimizer
-        samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_snn.copy(), args)
-        samples_modules_mpo = samples_modules_mpo[all_modules]
-        samples_modules_mpo.index = geneExpression.index
-        samples_modules_mpo = samples_modules_mpo.T.div(samples_modules_mpo.max(axis=0), axis=0).T
-        samples_modules_mpo.to_csv(args.output_dir+'flux_snn_mpoOptimized.csv',index=True,header=True)
+        #samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_snn.copy(), args)
+        #samples_modules_mpo = samples_modules_mpo[all_modules]
+        #samples_modules_mpo.index = geneExpression.index
+        #samples_modules_mpo = samples_modules_mpo.T.div(samples_modules_mpo.max(axis=0), axis=0).T
+        #samples_modules_mpo.to_csv(args.output_dir+'flux_snn_mpoOptimized.csv',index=True,header=True)
         #print("\n Massage Passing Optimazer Optimization Done! \n")
 
         print("\n Prediction Done! \n")
@@ -141,9 +142,9 @@ def main(args):
     
     
     flux_scfea_final = None
-    flux_scfea_mpo_final = None
+    #flux_scfea_mpo_final = None
     flux_snn_final = None
-    flux_snn_mpo_final = None
+    #flux_snn_mpo_final = None
     
     
     #init the outputs dir
@@ -198,11 +199,11 @@ def main(args):
         samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_init.copy(), args)
         samples_modules_mpo = samples_modules_mpo[all_modules]
         samples_modules_mpo.index = geneExpression.index
-        mpo_save_name = 'snn_labels_mpo'
-        if cur_step==0:
-            mpo_save_name = 'scfea_mpoOptimized'
-            flux_scfea_mpo_final = samples_modules_mpo.copy()
-        save_samples_modules(samples_modules_mpo,mpo_save_name, cur_step, args)
+        #mpo_save_name = 'snn_labels_mpo'
+        #if cur_step==0:
+        #    mpo_save_name = 'scfea_mpoOptimized'
+        #    flux_scfea_mpo_final = samples_modules_mpo.copy()
+        #save_samples_modules(samples_modules_mpo,mpo_save_name, cur_step, args)
         print("\n Massage Passing Optimazer Optimization Done! \n")
         # print("\n samples_modules_mpo:\n {0} \n".format(samples_modules_mpo.iloc[:5, :]))
         #sys.exit(1)
@@ -293,13 +294,14 @@ def main(args):
 
     print("\n max_snn_step={0} \n".format(max_snn_step))
     save_snn_model_weights(max_snn_step,args)
+    save_grad_file(args)
     
     
     # save final flux res
     flux_scfea_final.to_csv(args.output_dir+'flux_scfea.csv',index=True,header=True)
-    flux_scfea_mpo_final.to_csv(args.output_dir+'flux_scfea_mpo.csv',index=True,header=True)
+    #flux_scfea_mpo_final.to_csv(args.output_dir+'flux_scfea_mpo.csv',index=True,header=True)
     flux_snn_final.to_csv(args.output_dir+'flux_snn.csv',index=True,header=True)
-    flux_snn_mpo_final.to_csv(args.output_dir+'flux_snn_mpo.csv',index=True,header=True)
+    #flux_snn_mpo_final.to_csv(args.output_dir+'flux_snn_mpo.csv',index=True,header=True)
 
 
 def parse_arguments(parser):
@@ -315,9 +317,9 @@ def parse_arguments(parser):
                         help="The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are provided in /data/ folder.")
     parser.add_argument('--modules_genes_file_name',type=str,default='test_modules_genes.json',
                         help="The json file contains genes for each module. We provide human and mouse two models in scFEA. For human model, please use module_gene_m168.csv which is default.  All candidate moduleGene files are provided in /data/ folder.")
-    parser.add_argument('--cycle_detection',type=int,default=0,
+    parser.add_argument('--cycle_detection',type=int,default=1,
                         help="Remove the cycles in the graph. 0=False, 1=True")
-    parser.add_argument('--epoch_limit_all', type=int, default=20,
+    parser.add_argument('--epoch_limit_all', type=int, default=30,
                         help="The user defined early stop Epoch(the whole framework)")
     parser.add_argument('--imbalance_loss_limit_all', type=float, default=0.01,
                         help="The user defined early stop imbalance loss.")
