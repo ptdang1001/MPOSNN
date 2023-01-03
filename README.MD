@@ -116,11 +116,10 @@ You can find the results in the directory "outputs", please click [here](https:/
 2. "flux_snn.csv", flux values from SNN.
 3. "flux_snn_grad.csv", the gradients.
 4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
-5. "tmp_flux_res", the history of results of iterations.
-6. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
-    - 6.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
-    - 6.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
-    - 6.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
+5. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
+    - 5.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
+    - 5.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
+    - 5.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
 
 
 ## Run code with default parameters:**
