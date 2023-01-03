@@ -126,7 +126,7 @@ def main(args):
         return True
     
 
-    #all steps: scfea->bp<->snn(training,testing,predicting)
+    #all steps: scfea->mpo<->snn(training,testing,predicting)
 
     std_mean_col_scfea_all = []
     std_mean_col_mpo_all = []
