@@ -111,7 +111,7 @@ options:
 
 ## Outputs:
 
-You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN) to see the output examples:
+You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN) to see the output examples(Just for testing, no mearning):
 1. "flux_scfea.csv", flux values from scFEA.
 2. "flux_snn.csv", flux values from SNN.
 3. "flux_snn_grad.csv", the gradients.
