@@ -143,7 +143,7 @@ python src/main.py --input_dir "your data directory" --output_dir "your output d
 
 ## Questions & Problems
 
-If you have any questions or problems, please feel free to open a new issue [here](https://github.com/changwn/scFEA/issues). We will fix the new issue ASAP.  For code questions, please contact Pengtao Dang.
+If you have any questions or problems, please feel free to open a new issue [here](https://github.com/ptdang1001/MPOSNN/issues). We will fix the new issue ASAP.  For code questions, please contact Pengtao Dang.
 
 - [Pengtao Dang](https://ptdang1001.github.io/)
 (pdang@iu.edu)
