@@ -211,7 +211,26 @@ def save_snn_model_weights(save_step,args):
     command = "cp -r " + source_dir + " " + target_dir
     os.system(command)
 
-
+def save_grad_file(args):
+    files = [ file_i for file_i in os.listdir(args.output_dir) if '_grad_' in file_i ]
+    grad_all = []
+    for file_i in files:
+        cur_module = '_'.join(file_i.split('_')[2:4])
+        cur_module_grad_df = pd.read_csv(args.output_dir+file_i,index_col=0)
+        cur_module_grad_df.columns = cur_module_grad_df.columns.map(lambda gene_i: cur_module+'_'+gene_i)
+        if len(grad_all)==0:
+            grad_all = cur_module_grad_df.copy()
+        else:
+            grad_all = pd.concat([grad_all, cur_module_grad_df],axis=1, ignore_index=False)
+        os.remove(args.output_dir+file_i)
+        
+    module_genes=grad_all.columns.values.tolist()
+    module_genes.sort()
+    grad_all = grad_all[module_genes]
+    grad_all=grad_all.T
+    grad_all.to_csv(args.output_dir+"flux_snn_grad.csv",index=True, header=True)
+    
+    
 # @pysnooper.snoop()
 def get_imbalanceLoss(factors_nodes, belief_set):
     imbalanceLoss_values = []
