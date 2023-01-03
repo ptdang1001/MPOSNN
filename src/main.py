@@ -121,7 +121,7 @@ def main(args):
         #samples_modules_mpo = samples_modules_mpo.T.div(samples_modules_mpo.max(axis=0), axis=0).T
         #samples_modules_mpo.to_csv(args.output_dir+'flux_snn_mpoOptimized.csv',index=True,header=True)
         #print("\n Massage Passing Optimazer Optimization Done! \n")
-
+        save_grad_file(args)
         print("\n Prediction Done! \n")
         return True
     
