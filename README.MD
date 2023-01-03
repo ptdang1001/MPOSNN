@@ -20,7 +20,7 @@ If you have an interested topic, please feel free to open an [issue](https://git
 ## The computational framework of MPOSNN
 
 <p align="center">
-  <img width="60%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/scFEA_MPO_SNN_framework.png">
+  <img width="60%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/scFEA_MPO_SNN.png">
 </p>
 
 ## Requirements and Installation
