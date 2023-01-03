@@ -103,8 +103,11 @@ options:
 **Inputs:
 ```
 (1)scRNA-seq data(rows:genes, columns:samples/cells)
-(2)Adjacency matrix a factor graph, 1:="The parent node(compound) of a reaction(M_i).", -1:="The child node(compound) of a reaction(M_i)", 0:="No connection bewteen compound and reaction". 
-(3) Modules(Reactions) and contained genes.
+(2)Adjacency matrix a factor graph, 
+   1:="The parent node(compound) of a reaction(M_i).", 
+   -1:="The child node(compound) of a reaction(M_i)", 
+   0:="No connection bewteen compound and reaction". 
+(3)Modules(Reactions) and contained genes.
 ```
 **Outputs:
 ```
@@ -117,9 +120,9 @@ You can find the results in the directory "outputs":
 (6)"Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
 (7)"tmp_flux_res", the history of results of iterations.
 (8)"flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.
-(8.1)"module wise std":= $\frac{\sum_{j=1}^{n}s td(Y_{:,j}^{predicted})}{n}$
-(8.2)"all mean scale":= $\frac{\sum_{i=1}^{M} \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
-(8.3)"sample wise imbalance loss":=$\frac{\sum_{i=1}^{M} ImbalanceLoss(Y_{i,:})}{M}$
+  (8.1)"module wise std":= $\frac{\sum_{j=1}^{n}s td(Y_{:,j}^{predicted})}{n}$
+  (8.2)"all mean scale":= $\frac{\sum_{i=1}^{M} \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
+  (8.3)"sample wise imbalance loss":=$\frac{\sum_{i=1}^{M} ImbalanceLoss(Y_{i,:})}{M}$
 ```
 
 **Run code with default parameters:**
