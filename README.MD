@@ -122,7 +122,7 @@ You can find the results in the directory "outputs":
 8. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.
     - 8.1. "module wise std":= $\frac{\sum_{j=1} ^{n}std(Y_{:,j}^{predicted})}{n}$
     - 8.2. "all mean scale":= $\frac{\sum_{i=1} ^{M}\ \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
-    - 8.3. "sample wise imbalance loss":=$\frac{\sum_{i=1} ^{M} ImbalanceLoss(Y_{i,:})}{M}$
+    - 8.3. "sample wise imbalance loss":= $\frac{\sum_{i=1} ^{M}\ ImbalanceLoss(Y_{i,:})}{M}$
 
 
 **Run code with default parameters:**
