@@ -298,8 +298,10 @@ def main(args):
     
     
     # save final flux res
+    flux_scfea_final = flux_scfea_final.T.div(flux_scfea_final.max(axis=0), axis=0).T
     flux_scfea_final.to_csv(args.output_dir+'flux_scfea.csv',index=True,header=True)
     #flux_scfea_mpo_final.to_csv(args.output_dir+'flux_scfea_mpo.csv',index=True,header=True)
+    flux_snn_final = flux_snn_final.T.div(flux_snn_final.max(axis=0), axis=0).T
     flux_snn_final.to_csv(args.output_dir+'flux_snn.csv',index=True,header=True)
     #flux_snn_mpo_final.to_csv(args.output_dir+'flux_snn_mpo.csv',index=True,header=True)
 
