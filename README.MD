@@ -100,7 +100,7 @@ options:
 
 ```
 
-** Inputs:
+## Inputs:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
 2. Adjacency matrix a factor graph, 
@@ -109,7 +109,7 @@ options:
    - 0:="No connection bewteen compound and reaction". 
 3. Modules(Reactions) and contained genes.
 
-** Outputs:
+## Outputs:
 
 You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN) to see the output examples:
 1. "flux_scfea.csv", flux values from scFEA.
