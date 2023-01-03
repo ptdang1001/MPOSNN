@@ -102,28 +102,27 @@ options:
 
 **Inputs:
 
->(1)scRNA-seq data(rows:genes, columns:samples/cells)
->(2)Adjacency matrix a factor graph, 
+1.scRNA-seq data(rows:genes, columns:samples/cells)
+2.Adjacency matrix a factor graph, 
    1:="The parent node(compound) of a reaction(M_i).", 
    -1:="The child node(compound) of a reaction(M_i)", 
    0:="No connection bewteen compound and reaction". 
->(3)Modules(Reactions) and contained genes.
+3.Modules(Reactions) and contained genes.
 
 **Outputs:
 
 You can find the results in the directory "outputs":
->(1)"flux_scfea.csv", flux values from scFEA.
->(2)"flux_scfea_mpo.csv", scFEA's flux values optimized by MPO.
->(3)"flux_snn.csv", flux values from SNN.
->(4)"flux_snn_mpo.csv", SNN's flux values optimized by MPO.
->(5)"flux_snn_M_....csv", the gradients.
->(6)"Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
->(7)"tmp_flux_res", the history of results of iterations.
->(8)"flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.
-  (8.1)"module wise std":= $\frac{\sum_ {j=1}^{n}std(Y_ {:,j}^{predicted})}{n}$
-  $\sqrt{3x-1}+(1+x)^2$
-  (8.2)"all mean scale":= $\frac{\sum_{i=1}^{M} \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
-  (8.3)"sample wise imbalance loss":=$\frac{\sum_{i=1}^{M} ImbalanceLoss(Y_{i,:})}{M}$
+1."flux_scfea.csv", flux values from scFEA.
+2."flux_scfea_mpo.csv", scFEA's flux values optimized by MPO.
+3."flux_snn.csv", flux values from SNN.
+4."flux_snn_mpo.csv", SNN's flux values optimized by MPO.
+5."flux_snn_M_....csv", the gradients.
+6."Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
+7."tmp_flux_res", the history of results of iterations.
+8."flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.
+  8.1."module wise std":= $\frac{\sum_ {j=1}^{n}std(Y_ {:,j}^{predicted})}{n}$
+  8.2."all mean scale":= $\frac{\sum_{i=1}^{M} \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
+  8.3."sample wise imbalance loss":=$\frac{\sum_{i=1}^{M} ImbalanceLoss(Y_{i,:})}{M}$
 
 
 **Run code with default parameters:**
