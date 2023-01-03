@@ -309,13 +309,13 @@ def parse_arguments(parser):
                         help="The inputs directory.")
     parser.add_argument('--output_dir', type=str, default="./outputs/",
                         help="The outputs directory, you can find all outputs in this directory.")
-    parser.add_argument('--geneExpression_file_name', type=str, default='geneExpression_test.csv.gz',
+    parser.add_argument('--geneExpression_file_name', type=str, default='test_geneExpression.csv.gz',
                         help="The scRNA-seq file name.")
-    parser.add_argument('--compounds_modules_file_name', type=str, default='compouns_modules_test.csv',
+    parser.add_argument('--compounds_modules_file_name', type=str, default='test_compounds_modules.csv',
                         help="The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are provided in /data/ folder.")
-    parser.add_argument('--modules_genes_file_name',type=str,default='modules_genes_test.json',
+    parser.add_argument('--modules_genes_file_name',type=str,default='test_modules_genes.json',
                         help="The json file contains genes for each module. We provide human and mouse two models in scFEA. For human model, please use module_gene_m168.csv which is default.  All candidate moduleGene files are provided in /data/ folder.")
-    parser.add_argument('--cycle_detection',type=int,default=1,
+    parser.add_argument('--cycle_detection',type=int,default=0,
                         help="Remove the cycles in the graph. 0=False, 1=True")
     parser.add_argument('--epoch_limit_all', type=int, default=20,
                         help="The user defined early stop Epoch(the whole framework)")
