@@ -20,7 +20,7 @@ If you have an interested topic, please feel free to open an [issue](https://git
 ## The computational framework of MPOSNN
 
 <p align="center">
-  <img width="60%" src="https://github.com/changwn/scFEA/blob/master/doc/Figure%201.png">
+  <img width="60%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/scfea_mpo_snn_framework.pdf">
 </p>
 
 ## Requirements and Installation
@@ -38,7 +38,7 @@ MPOSNN is implemented by Python3. If you don't have python, please download [Ana
 
 Download MPOSNN:
 ```
-git clone https://github.com/changwn/MPOSNN
+git clone https://github.com/ptdang1001/MPOSNN
 ```
 
 Install requirements:
@@ -142,7 +142,7 @@ python src/main.py --input_dir "your data directory" --output_dir "your output d
 
 If you have any questions or problems, please feel free to open a new issue [here](https://github.com/changwn/scFEA/issues). We will fix the new issue ASAP.  For code questions, please contact Pengtao Dang.
 
-- [Pengtao Dang](https://changwn.github.io/)
+- [Pengtao Dang](https://ptdang1001.github.io/)
 (pdang@iu.edu)
 
 For any other further questions or requests, please contact the Principle Investigator of BDRL lab.
