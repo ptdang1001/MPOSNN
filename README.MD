@@ -122,15 +122,17 @@ You can find the results in the directory "outputs", please click [here](https:/
     - 5.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
 
 
-## Run code with default parameters:**
+** Run code with default parameters: **
 ```
-
+# just copy your data to the directory "inputs"
+# The algorithm saves the model weights automatically
+# you can get the results in the directory "outputs"
 
 python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
 
 ```
 
-## Traning and Predicting example:**
+** Traning and Predicting example: **
 ```
 # just copy your data to the directory "inputs"
 # The algorithm saves the model weights automatically
@@ -140,7 +142,7 @@ python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --
 
 ```
 
-## Predicting only example:**
+** No Training, Predicting only example: **
 ```
 # just copy your data to the directory "inputs"
 # you can get the results in the directory "outputs"
