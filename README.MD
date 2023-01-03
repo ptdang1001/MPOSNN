@@ -124,6 +124,7 @@ You can find the results in the directory "outputs":
     - 8.2. "all mean scale":= $\frac{\sum_{i=1} ^M \ \sum_{j=1}^{n} Y_{i,j}^{predicted}}{M*N}$
     - 8.3. "sample wise imbalance loss":= $\frac{\sum_{i=1} ^M \ ImbalanceLoss(Y_{i,:})}{M}$
     - $\left( \sum_{k=1}^n a_k b_k \right)^2$
+$$\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$
 
 
 **Run code with default parameters:**
