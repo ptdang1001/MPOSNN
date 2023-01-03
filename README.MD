@@ -111,35 +111,42 @@ options:
 
 ** Outputs:
 
-You can find the results in the directory "outputs":
+You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN) to see the output examples:
 1. "flux_scfea.csv", flux values from scFEA.
-2. "flux_scfea_mpo.csv", scFEA's flux values optimized by MPO.
-3. "flux_snn.csv", flux values from SNN.
-4. "flux_snn_mpo.csv", SNN's flux values optimized by MPO.
-5. "flux_snn_M_....csv", the gradients.
-6. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
-7. "tmp_flux_res", the history of results of iterations.
-8. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
-    - 8.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
-    - 8.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
-    - 8.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
+2. "flux_snn.csv", flux values from SNN.
+3. "flux_snn_grad.csv", the gradients.
+4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
+5. "tmp_flux_res", the history of results of iterations.
+6. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
+    - 6.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
+    - 6.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
+    - 6.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
 
 
 **Run code with default parameters:**
 ```
-# just move your data to the directory "inputs"
+
+
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
+
+```
+
+**Traning and Predicting example:**
+```
+# just copy your data to the directory "inputs"
+# The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 1 --do_predict_snn 1
 
 ```
 
-**Other example:**
+**Predicting only example:**
 ```
-python src/main.py --input_dir "your data directory" --output_dir "your output directory" --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
+# just copy your data to the directory "inputs"
 # you can get the results in the directory "outputs"
-```
 
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 0 --do_predict_snn 1
 
 ## Questions & Problems
 
@@ -158,4 +165,3 @@ PhD candidate at [Biomedical Data Research Lab (BDRL)](https://zcslab.github.io/
 ## Reference
 
 1. N. Alghamdi, W. Chang, P. Dang, X. Lu, C. Wan, Z. Huang, J. Wang, M. Fishel, S. Cao, C. Zhang. scFEA: A graph neural network model to estimate cell-wise metabolic using single cell RNA-seq data, under review at *Genome Research*, 2020.
-2. Kschischang, F.R., Frey, B.J. and Loeliger, H.A., 2001. Factor graphs and the sum-product algorithm. IEEE Transactions on information theory, 47(2), pp.498-519.
