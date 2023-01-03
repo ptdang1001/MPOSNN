@@ -151,6 +151,9 @@ def intersect_samples_genes(geneExpression,modules_genes):
     all_geneExpr_genes = set(geneExpression.columns.values)
     unique_genes = list(set(all_model_genes).intersection(all_geneExpr_genes))
     geneExpression=geneExpression[unique_genes]
+    if len(unique_genes)==0:
+        print("No Intersection of Genes!!")
+        return []
 
     return geneExpression
 
