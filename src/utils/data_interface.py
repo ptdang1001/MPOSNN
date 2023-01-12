@@ -8,6 +8,7 @@ import pandas as pd
 #import pysnooper
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 import networkx as nx
 from networkx.drawing.nx_agraph import to_agraph
 from networkx.algorithms import bipartite
@@ -186,7 +187,7 @@ def shuffle_geneExpression(geneExpression,by="full_random"):
 
 
 def save_samples_modules(samples_modules, method_name,cur_step, args):
-    samples_modules = samples_modules.T.div(samples_modules.max(axis=0), axis=0).T
+    samples_modules = min_max_normalization(samples_modules, by="col")
     
     save_dir = args.output_dir + 'tmp_flux_res/' + method_name + '/'
     if not os.path.exists(save_dir):
@@ -233,15 +234,31 @@ def save_grad_file(args):
     grad_all=grad_all.T
     grad_all.to_csv(args.output_dir+"flux_snn_grad.csv",index=True, header=True)
     
+def min_max_normalization(matrix, by='col'):
+    scaler = MinMaxScaler()
+
+    if by == 'col':
+        matrix_col_scaled = pd.DataFrame(scaler.fit_transform(matrix), index=matrix.index, columns=matrix.columns)
+        matrix_col_scaled[matrix_col_scaled == 0] = 100000.0
+        matrix_col_scaled[matrix_col_scaled == 100000.0] = matrix_col_scaled.min().min()
+        return matrix_col_scaled
+    elif by == 'row':
+        matrix_row_scaled = pd.DataFrame(scaler.fit_transform(matrix.T), index=matrix.T.index, columns=matrix.T.columns)
+        matrix_row_scaled = matrix_row_scaled.T
+        matrix_row_scaled[matrix_row_scaled == 0] = 1000000.0
+        matrix_row_scaled[matrix_row_scaled == 1000000.0] = matrix_row_scaled.min().min()
+        return matrix_row_scaled
+    else:
+        return "Error!!!"
     
 # @pysnooper.snoop()
 def get_imbalanceLoss(factors_nodes, belief_set):
     imbalanceLoss_values = []
     for belief_i in belief_set:
-        max_val=max(belief_i)
-        max_val=max_val if max_val>0 else 1
-        belief_new = np.true_divide(belief_i,max_val)
-        tmp1 = belief_new * factors_nodes.values
+        #max_val=max(belief_i)
+        #max_val=max_val if max_val>0 else 1
+        #belief_new = np.true_divide(belief_i,max_val)
+        tmp1 = belief_i * factors_nodes.values
         tmp2 = np.sum(tmp1, axis=1)
         tmp3 = abs(tmp2)
         #tmp4 = np.sum(tmp3)
@@ -266,6 +283,11 @@ def get_mse(matrix1, matrix2, by="col"):
 def get_std_scale_imbalanceLoss_realData(compounds_modules, samples_modules_scfea, samples_modules_mpo,
                                       samples_modules_snn):
 
+    
+    samples_modules_scfea = min_max_normalization(samples_modules_scfea, by='col')
+    samples_modules_bp = min_max_normalization(samples_modules_bp, by='col')
+    samples_modules_snn = min_max_normalization(samples_modules_snn, by='col')
+    
     scale_mean_all_scfea = samples_modules_scfea.mean().mean()
     scale_mean_all_mpo=samples_modules_mpo.mean().mean()
     scale_mean_all_snn=samples_modules_snn.mean().mean()
@@ -275,9 +297,9 @@ def get_std_scale_imbalanceLoss_realData(compounds_modules, samples_modules_scfe
     imbalanceLoss_mean_snn = np.mean(get_imbalanceLoss(compounds_modules, samples_modules_snn.values))
 
     # normalize the data by col
-    samples_modules_snn = samples_modules_snn.T.div(samples_modules_snn.max(axis=0), axis=0).T
-    samples_modules_scfea = samples_modules_scfea.T.div(samples_modules_scfea.max(axis=0), axis=0).T
-    samples_modules_mpo = samples_modules_mpo.T.div(samples_modules_mpo.max(axis=0), axis=0).T
+    #samples_modules_snn = samples_modules_snn.T.div(samples_modules_snn.max(axis=0), axis=0).T
+    #samples_modules_scfea = samples_modules_scfea.T.div(samples_modules_scfea.max(axis=0), axis=0).T
+    #samples_modules_mpo = samples_modules_mpo.T.div(samples_modules_mpo.max(axis=0), axis=0).T
 
     std_mean_col_scfea = np.mean(np.std(samples_modules_scfea, axis=0))
     std_mean_col_mpo = np.mean(np.std(samples_modules_mpo, axis=0))
