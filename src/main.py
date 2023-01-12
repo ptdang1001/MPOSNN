@@ -34,6 +34,7 @@ from utils.data_interface import get_cycles
 from utils.data_interface import save_CycleCollapsed_factors_nodes
 from utils.data_interface import remove_outside_compounds
 from utils.data_interface import remove_grad_files
+from utils.data_interface import min_max_normalization
 from utils.data_interface import save_snn_model_weights
 from utils.data_interface import save_grad_file  
 
@@ -113,7 +114,7 @@ def main(args):
         samples_modules_snn = samples_modules_snn.abs()
         samples_modules_snn = samples_modules_snn[all_modules]
         samples_modules_snn.index = geneExpression.index
-        samples_modules_snn = samples_modules_snn.T.div(samples_modules_snn.max(axis=0), axis=0).T
+        samples_modules_snn = min_max_normalization(samples_modules_snn,by="col")
         samples_modules_snn.to_csv(args.output_dir+'flux_snn.csv',index=True,header=True)
         #print("\n samples_modules_snn:\n {0} \n".format(samples_modules_snn))
         
@@ -187,7 +188,7 @@ def main(args):
     #########################################################################################################################
     samples_modules_init = samples_modules_scfea.copy()
     cur_step = 0
-    save_flux_snn_final_threshold = float('-inf')
+    save_flux_snn_final_threshold = float('inf')
     max_snn_step = -1
     cur_imbalanceLoss_mean_snn_all = float('inf')
     samples_modules_mpo_loss_min_target = []
@@ -199,6 +200,7 @@ def main(args):
 
         #########################################################################################################################
         # 2nd step to improve the initial values by Massage Passing Optimizer
+        samples_modules_init = min_max_normalization(samples_modules_init,by='col')
         samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_init.copy(), args)
         samples_modules_mpo = samples_modules_mpo[all_modules]
         samples_modules_mpo.index = geneExpression.index
@@ -215,7 +217,8 @@ def main(args):
         # 3rd step to improve the flux values by supervised neuron network
         if len(samples_modules_mpo_loss_min_target) == 0:
             samples_modules_mpo_loss_min_target = samples_modules_mpo.copy()
-
+        
+        samples_modules_mpo_loss_min_target = min_max_normalization(samples_modules_mpo_loss_min_target,by='col')
         samples_modules_snn = snn(geneExpression.copy(), modules_genes.copy(), samples_modules_mpo_loss_min_target.copy(), cur_step+1, args)
         
         cur_step += 1
@@ -285,13 +288,13 @@ def main(args):
                                         cur_title_end, args)
         # sys.exit(1)
         
-        if std_scale_imbalanceLoss['std_mean_col_snn'] > save_flux_snn_final_threshold:
+        if std_scale_imbalanceLoss['imbalanceLoss_mean_snn'] < save_flux_snn_final_threshold:
             max_snn_step = cur_step
             flux_snn_final = samples_modules_snn
             flux_snn_mpo_final = samples_modules_mpo
-            save_flux_snn_final_threshold = std_scale_imbalanceLoss['std_mean_col_snn']
+            save_flux_snn_final_threshold = std_scale_imbalanceLoss['imbalanceLoss_mean_snn']
         
-        print("\n max_snn_step={0} \n".format(max_snn_step))
+        print("\n min_snn_step={0} \n".format(max_snn_step))
         remove_grad_files(max_snn_step,args)
             
 
@@ -301,10 +304,12 @@ def main(args):
     
     
     # save final flux res
-    flux_scfea_final = flux_scfea_final.T.div(flux_scfea_final.max(axis=0), axis=0).T
+    #flux_scfea_final = flux_scfea_final.T.div(flux_scfea_final.max(axis=0), axis=0).T
+    flux_scfea_final = min_max_normalization(flux_scfea_final,by='col')
     flux_scfea_final.to_csv(args.output_dir+'flux_scfea.csv',index=True,header=True)
     #flux_scfea_mpo_final.to_csv(args.output_dir+'flux_scfea_mpo.csv',index=True,header=True)
-    flux_snn_final = flux_snn_final.T.div(flux_snn_final.max(axis=0), axis=0).T
+    #flux_snn_final = flux_snn_final.T.div(flux_snn_final.max(axis=0), axis=0).T
+    flux_snn_final = min_max_normalization(flux_snn_final,by='col')
     flux_snn_final.to_csv(args.output_dir+'flux_snn.csv',index=True,header=True)
     #flux_snn_mpo_final.to_csv(args.output_dir+'flux_snn_mpo.csv',index=True,header=True)
 
