@@ -1,4 +1,4 @@
-##  MPOSNN: A Massage Passing Optimizer-Based Supervised Neural Network Model to Estimate Cell-Wise Metabolic Using Single Cell RNA-seq Data.
+##  Antigen Presentation Network.
 
 ## Change Log
 
