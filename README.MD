@@ -102,13 +102,14 @@ options:
 ```
 
 ## Inputs:
+Antigen Presentation Network:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
-2. Adjacency matrix a factor graph, you can choose one from "inputs"
+2. Antigen Presentation Network, Adjacency matrix a factor graph, you can choose one from "inputs"
    - 1:="The parent node(compound) of a reaction(M_i).", 
    - -1:="The child node(compound) of a reaction(M_i)", 
    - 0:="No connection bewteen compound and reaction". 
-3. Modules(Reactions) and contained genes, you can choose one from "inputs".
+3. Antigen Presentation reactions and the genes. Modules(Reactions) and contained genes, you can choose one from "inputs".
 
 ## Outputs:
 
