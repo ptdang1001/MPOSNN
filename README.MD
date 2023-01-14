@@ -8,7 +8,7 @@
 
 
 ### To be released soon 
-If you have an interested topic, please feel free to open an [issue](https://github.com/changwn/scFEA/issues) or I can also merge your completed function into main branch
+If you have an interested topic, please feel free to open an [issue](https://github.com/ptdang1001/MPOSNN/issues) or I can also merge your completed function into main branch
 
 
 
