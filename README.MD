@@ -108,7 +108,13 @@ Antigen Presentation Network:
    - 1:="The parent node(compound) of a reaction(M_i).", 
    - -1:="The child node(compound) of a reaction(M_i)", 
    - 0:="No connection bewteen compound and reaction". 
-   Please see the sample bellow:
+   Please see the graph bellow:
+   <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/Antigen_Presentation_pathway.png">
+   </p>
+   
+   
+   Please see the adjacency matrix bellow:
    <p align="center">
     <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules.png">
    </p>
