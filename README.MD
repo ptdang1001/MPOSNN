@@ -1,5 +1,5 @@
 ## MPOSNN
-## Antigen Presentation Network.
+## Antigen Presentation Pathway.
 
 ## Change Log
 
