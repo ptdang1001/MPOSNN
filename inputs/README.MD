@@ -4,5 +4,5 @@
 xxxxxxxxxxxxxxxxxxxxx
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Network/inputs/ANT2_graph.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Network/inputs/Antigen_Presentation_pathway.png">
 </p>
