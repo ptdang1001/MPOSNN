@@ -123,7 +123,16 @@ Antigen Presentation Network:
 
 You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/main/outputs) to see the output examples(Just for testing, no mearning):
 1. "flux_scfea.csv", flux values from scFEA, rows:samples, columns:modules, each entry is a flux value.
+  <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scfea.png">
+  </p>
+
 2. "flux_snn.csv", flux values from SNN, rows:samples, columns:modules, each entry is a flux value.
+  <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_snn.png">
+  </p>
+  
+  
 3. "flux_snn_grad.csv", the gradients, rows:genes, columns:samples, each value represents the partial derivative of the model with respect to the gene.
 4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
 5. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
