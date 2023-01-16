@@ -143,6 +143,10 @@ You can find the results in the directory "outputs", please click [here](https:/
     - 5.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
     - 5.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
     - 5.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
+    
+    <p align="center">
+      <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scFEA_MPO_SNN_std_scale_imbalance.png">
+    </p>
 
 
 ** Run code with default parameters: **
