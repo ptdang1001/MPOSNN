@@ -37,7 +37,7 @@ $$Response = M_8 + MSI status$$
 , as detailed below. Our analysis suggested the activity level of trimming of peptides and MSI status are predictive of the outcome of immuno-therapy.
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_analysis_resluts.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_analysis_results.png">
 </p>
 
 
