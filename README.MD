@@ -20,7 +20,7 @@ If you have an interested topic, please feel free to open an [issue](https://git
 ## The computational framework of MPOSNN
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/mposnn.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/mposnn.png">
 </p>
 
 ## Results
@@ -129,7 +129,7 @@ options:
 Antigen Presentation Network:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
-2. Antigen Presentation Network, Adjacency matrix a factor graph, you can choose one from "inputs"
+2. Antigen Presentation Network, Adjacency matrix, a factor graph
    - 1:="The parent node(compound) of a reaction(M_i).", 
    - -1:="The child node(compound) of a reaction(M_i)", 
    - 0:="No connection bewteen compound and reaction".  
@@ -145,7 +145,7 @@ Antigen Presentation Network:
     <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules.png">
    </p>
    
-3. Antigen Presentation reactions and the genes. Modules(Reactions) and contained genes, you can choose one from "inputs".
+3. Antigen Presentation reactions and the genes. Modules(Reactions) and contained genes.
 
    Please see the json file sample bellow:
    <p align="center">
@@ -154,7 +154,7 @@ Antigen Presentation Network:
 
 ## Outputs:
 
-You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/main/outputs) to see the output examples(Just for testing, no mearning):
+You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway/outputs) to see the output examples(Just for testing, no mearning):
 1. "flux_scfea.csv", flux values from scFEA, rows:samples, columns:modules, each entry is a flux value.
   <p align="center">
     <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scfea.png">
@@ -188,26 +188,27 @@ You can find the results in the directory "outputs", please click [here](https:/
 # The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name"
 
 ```
 
 ** Traning and Predicting example: **
 ```
 # just copy your data to the directory "inputs"
-# The algorithm saves the model weights automatically
+# The algorithm saves the model automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 1 --do_predict_snn 1
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 1 --do_predict_snn 1
 
 ```
 
 ** No Training, Predicting only example: **
 ```
 # just copy your data to the directory "inputs"
+# you have to train the model at least once befor this predicting only step. We don't offer default trained model. 
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 0 --do_predict_snn 1
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 0 --do_predict_snn 1
 
 ```
 
