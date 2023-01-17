@@ -38,7 +38,7 @@ MPOSNN is implemented by Python3. If you don't have python, please download [Ana
 
 Download MPOSNN:
 ```
-git clone https://github.com/ptdang1001/MPOSNN
+git clone https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway
 ```
 
 Install requirements:
