@@ -43,7 +43,7 @@ git clone https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway
 
 Install requirements:
 ```
-cd MPOSNN
+cd MPOSNN-Antigen_Presentation_Pathway
 conda install --file requirements
 conda install pytorch torchvision -c pytorch
 pip install --user magic-impute
