@@ -239,13 +239,15 @@ def min_max_normalization(matrix, by='col'):
 
     if by == 'col':
         matrix_col_scaled = pd.DataFrame(scaler.fit_transform(matrix), index=matrix.index, columns=matrix.columns)
-        matrix_col_scaled[matrix_col_scaled == 0] = 100000.0
+        matrix_col_scaled[matrix_col_scaled<0.0001]=0.0
+        matrix_col_scaled[matrix_col_scaled == 0.0] = 100000.0
         matrix_col_scaled[matrix_col_scaled == 100000.0] = matrix_col_scaled.min().min()
         return matrix_col_scaled
     elif by == 'row':
         matrix_row_scaled = pd.DataFrame(scaler.fit_transform(matrix.T), index=matrix.T.index, columns=matrix.T.columns)
         matrix_row_scaled = matrix_row_scaled.T
-        matrix_row_scaled[matrix_row_scaled == 0] = 1000000.0
+        matrix_row_scaled[matrix_row_scaled<0.0001]=0.0
+        matrix_row_scaled[matrix_row_scaled == 0.0] = 1000000.0
         matrix_row_scaled[matrix_row_scaled == 1000000.0] = matrix_row_scaled.min().min()
         return matrix_row_scaled
     else:
