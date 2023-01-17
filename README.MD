@@ -3,15 +3,12 @@
 ## Change Log
 
 ### v0.5
-- Release the initial version and installtion manual
-- Release human complete metabolic flux modules
+- Release the initial version and installation manual
+- Release Antigen Presentation Pathway
 
 
 ### To be released soon 
 If you have an interested topic, please feel free to open an [issue](https://github.com/ptdang1001/MPOSNN/issues) or I can also merge your completed function into main branch
-
-
-
 
 ## Introduction
 
@@ -126,26 +123,25 @@ options:
 ```
 
 ## Inputs:
-Antigen Presentation Network:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
-2. Antigen Presentation Network, Adjacency matrix, a factor graph
+2. Antigen Presentation Pathway data, Adjacency matrix, a factor graph
    - 1:="The parent node(compound) of a reaction(M_i).", 
    - -1:="The child node(compound) of a reaction(M_i)", 
    - 0:="No connection bewteen compound and reaction".  
    
-   Please see the graph bellow:
+   Please see the graph bellow, you can find it in the directory "inputs":
    <p align="center">
     <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/Antigen_Presentation_pathway.png">
    </p>
    
    
-   Please see the adjacency matrix bellow:
+   Please see the adjacency matrix bellow, you can find it in the directory "inputs":
    <p align="center">
     <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules.png">
    </p>
    
-3. Antigen Presentation reactions and the genes. Modules(Reactions) and contained genes.
+3. Antigen Presentation Pathway reactions and the genes. Modules(Reactions) and contained genes, you can find it in the directory "inputs".
 
    Please see the json file sample bellow:
    <p align="center">
@@ -172,6 +168,7 @@ You can find the results in the directory "outputs", please click [here](https:/
   </p>
 
 4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
+
 5. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
     - 5.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
     - 5.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
@@ -184,7 +181,7 @@ You can find the results in the directory "outputs", please click [here](https:/
 
 ** Run code with default parameters: **
 ```
-# just copy your data to the directory "inputs"
+# just copy your data into the directory "inputs"
 # The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
@@ -194,7 +191,7 @@ python src/main.py --geneExpression_file_name "your scRNA-seq data file name"
 
 ** Traning and Predicting example: **
 ```
-# just copy your data to the directory "inputs"
+# just copy your data into the directory "inputs"
 # The algorithm saves the model automatically
 # you can get the results in the directory "outputs"
 
@@ -204,7 +201,7 @@ python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --
 
 ** No Training, Predicting only example: **
 ```
-# just copy your data to the directory "inputs"
+# just copy your data into the directory "inputs"
 # you have to train the model at least once befor this predicting only step. We don't offer default trained model. 
 # you can get the results in the directory "outputs"
 
