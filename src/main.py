@@ -62,12 +62,24 @@ def main(args):
     
     # load the modules(reactions) and the contained genes
     modules_genes = load_modulesGenes(args)
+    
+    
+    # remove non overlap genes
+    geneExpression = intersect_samples_genes(geneExpression,modules_genes)
+    if len(geneExpression)==0:
+        print("\n No Intersection of Genes between Data and Moduels! \n")
+        return False
+    #std_mean_col_geneExpression = np.mean(np.std(geneExpression.T.div(geneExpression.max(axis=0), axis=0).T,axis=0))
+    
+    
+    modules_genes = check_intersect_genes(geneExpression.columns.values,modules_genes)
     all_modules = list(modules_genes.keys())
     all_modules.sort()
     
+    
     #load the adjacency matrix of the factor graph
     compounds_modules = load_module(args)#compouns_modules is the adj matrix of the factor graph (reaction graph), rows:=compounds, columns:=modules
-    compounds_modules=compounds_modules[all_modules]
+    compounds_modules = compounds_modules[all_modules]
     
     #the detection of cycles in the factor graph
     title_name="Compounds_Modules_FactorGraph_original"
@@ -85,15 +97,9 @@ def main(args):
     
     #sys.exit()
     
-    # remove non overlap genes
-    geneExpression = intersect_samples_genes(geneExpression,modules_genes)
-    if len(geneExpression)==0:
-        print("\n No Intersection of Genes between Data and Moduels! \n")
-        return False
-    #std_mean_col_geneExpression = np.mean(np.std(geneExpression.T.div(geneExpression.max(axis=0), axis=0).T,axis=0))
     
-     # print the selected genes
-    check_intersect_genes(geneExpression.columns.values,modules_genes)
+    
+
     
     # components selection by pca, the default is to keep 90% of information
     geneExpression_pca,modules_genes_pca=None,None
