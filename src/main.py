@@ -80,6 +80,7 @@ def main(args):
     #load the adjacency matrix of the factor graph
     compounds_modules = load_module(args)#compouns_modules is the adj matrix of the factor graph (reaction graph), rows:=compounds, columns:=modules
     compounds_modules = compounds_modules[all_modules]
+    compounds_modules = remove_outside_compounds(compounds_modules)
     
     #the detection of cycles in the factor graph
     title_name="Compounds_Modules_FactorGraph_original"
@@ -93,7 +94,7 @@ def main(args):
         BDG,compounds_modules=save_CycleCollapsed_factors_nodes(compounds_modules,BDG,cycles_in_graph,args)
     else:
         print("\n No Cycle! \n")
-    compounds_modules = remove_outside_compounds(compounds_modules)
+    
     
     #sys.exit()
     
