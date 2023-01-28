@@ -161,8 +161,15 @@ def intersect_samples_genes(geneExpression,modules_genes):
 
 def check_intersect_genes(geneExpression_genes, modules_genes):
     geneExpression_genes=set(geneExpression_genes)
+    modules_genes_new={}
     for module_i,genes in modules_genes.items():
-        print("\n Cur module_i:{0}, intersect genes:{1} \n".format(module_i,set(genes).intersection(geneExpression_genes)))
+        cur_genes_intersection = ()
+        cur_genes_intersection = set(genes).intersection(geneExpression_genes)
+        if len(cur_genes_intersection) != 0:
+            modules_genes_new[module_i]=list(cur_genes_intersection)
+        print("\n Cur module_i:{0}, intersection of genes:{1} \n".format(module_i,cur_genes_intersection))
+        
+    return modules_genes_new
 
 
 
