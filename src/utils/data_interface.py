@@ -68,6 +68,7 @@ def remove_outside_compounds(factors_nodes):
     factors_nodes_abs=factors_nodes.abs()
     row_sum=factors_nodes_abs.sum(axis=1).values
     factors_nodes=factors_nodes.iloc[row_sum!=1,:]
+    factors_nodes = remove_allZero_rowAndCol(factors_nodes)
     return factors_nodes
 
 
