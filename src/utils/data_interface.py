@@ -295,7 +295,7 @@ def get_std_scale_imbalanceLoss_realData(compounds_modules, samples_modules_scfe
 
     
     samples_modules_scfea = min_max_normalization(samples_modules_scfea, by='col')
-    samples_modules_bp = min_max_normalization(samples_modules_bp, by='col')
+    samples_modules_mpo = min_max_normalization(samples_modules_mpo, by='col')
     samples_modules_snn = min_max_normalization(samples_modules_snn, by='col')
     
     scale_mean_all_scfea = samples_modules_scfea.mean().mean()
