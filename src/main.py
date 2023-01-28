@@ -88,12 +88,12 @@ def main(args):
     
     #sys.exit(1)
     
-    cycles_in_graph=get_cycles(BDG)
+    #cycles_in_graph=get_cycles(BDG)
     
-    if len(cycles_in_graph)>0:
-        BDG,compounds_modules=save_CycleCollapsed_factors_nodes(compounds_modules,BDG,cycles_in_graph,args)
-    else:
-        print("\n No Cycle! \n")
+    #if len(cycles_in_graph)>0:
+    #    BDG,compounds_modules=save_CycleCollapsed_factors_nodes(compounds_modules,BDG,cycles_in_graph,args)
+    #else:
+    #    print("\n No Cycle! \n")
     
     
     #sys.exit()
