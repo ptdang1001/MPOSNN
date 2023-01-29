@@ -154,6 +154,17 @@ def scFEA(geneExpr,moduleGene,cmMat,args):
     geneExprScale = torch.FloatTensor(geneExprScale.values).to(device)
     
     BATCH_SIZE = geneExpr.shape[0]
+    n_samples = geneExpr.shape[0]
+    if n_samples<50:
+        BATCH_SIZE = 1
+    elif n_samples<128:
+        BATCH_SIZE = 4
+    elif n_samples<256:
+        BATCH_SIZE = 16
+    elif n_samples<512:
+        BATCH_SIZE = 32
+    elif n_samples<1024:
+        BATCH_SIZE = 64
     
     '''
     moduleGene = pd.read_csv(
