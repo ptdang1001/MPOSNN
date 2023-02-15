@@ -342,10 +342,10 @@ def plot_FactorGraph(compounds_flux,title_name, args):
 
 
     for factor_name in compounds_flux.index.values:
-        idx = np.where(compounds_flux.loc[factor_name, :] == -1)[0]
+        idx = np.where(compounds_flux.loc[factor_name, :] == 1)[0]
         parent_nodes = list(np.take(compounds_flux.columns.values, idx)) if len(idx) else []
 
-        idx = np.where(compounds_flux.loc[factor_name, :] == 1)[0]
+        idx = np.where(compounds_flux.loc[factor_name, :] == -1)[0]
         child_nodes = list(np.take(compounds_flux.columns.values, idx)) if len(idx) else []
 
 
