@@ -126,8 +126,8 @@ options:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
 2. Antigen Presentation Pathway data, Adjacency matrix, a factor graph
-   - 1:="The parent node(compound) of a reaction(M_i).", 
-   - -1:="The child node(compound) of a reaction(M_i)", 
+   - 1:="The parent node(reaction M_i) of a compound", 
+   - -1:="The child node(reaction M_i) of a compound", 
    - 0:="No connection bewteen compound and reaction".  
    
    Please see the graph bellow, you can find it in the directory "inputs":
