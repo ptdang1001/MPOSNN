@@ -138,7 +138,7 @@ options:
    
    Please see the adjacency matrix bellow, you can find it in the directory "inputs":
    <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules_adj.png">
    </p>
    
 3. Antigen Presentation Pathway reactions and the genes. Modules(Reactions) and contained genes, you can find it in the directory "inputs".
