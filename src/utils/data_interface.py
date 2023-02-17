@@ -69,6 +69,9 @@ def remove_outside_compounds(factors_nodes):
     row_sum=factors_nodes_abs.sum(axis=1).values
     factors_nodes=factors_nodes.iloc[row_sum!=1,:]
     factors_nodes = remove_allZero_rowAndCol(factors_nodes)
+    print(SEP_SIGN)
+    print("\n compounds_Reactions sample:\n {0} \n".format(factors_nodes))
+    print(SEP_SIGN)
     return factors_nodes
 
 
@@ -82,13 +85,14 @@ def load_module(args):
     factors_nodes = remove_allZero_rowAndCol(factors_nodes)
     new_indexs = ['compound_' + str(i + 1) for i in range(factors_nodes.shape[0])]
     factors_nodes.index = new_indexs
+    '''
     print(SEP_SIGN)
     print("\nCompoundss:{0}\n".format(factors_nodes.index.values))
     print("\nReactions:{0}\n".format(factors_nodes.columns.values))
     print("\nCompounds_Reactions shape:{0}\n".format(factors_nodes.shape))
     print("\n compounds_Reactions sample:\n {0} \n".format(factors_nodes))
     print(SEP_SIGN)
-
+    '''
     return factors_nodes
 
 
@@ -147,17 +151,35 @@ def load_modulesGenes(args):
 
 def intersect_samples_genes(geneExpression,modules_genes):
 
-    all_model_genes = []
-    for genes in modules_genes.values():
-        all_model_genes.extend(genes)
-    all_geneExpr_genes = set(geneExpression.columns.values)
-    unique_genes = list(set(all_model_genes).intersection(all_geneExpr_genes))
-    geneExpression=geneExpression[unique_genes]
-    if len(unique_genes)==0:
-        print("No Intersection of Genes!!")
-        return []
+    all_module_genes = []
+    all_geneExpr_genes = set(geneExpression.columns.values.tolist())
+    module_genes_new = {}
+    
+    for module_i, genes in modules_genes.items():
+        cur_intersect_genes = list(set(genes).intersection(all_geneExpr_genes))
+        if len(cur_intersect_genes) != 0:
+            module_genes_new[module_i] = cur_intersect_genes
+        print("\n Cur module_i:{0}, intersection of genes:{1} \n".format(module_i,cur_intersect_genes))
 
-    return geneExpression
+        all_module_genes.extend(cur_intersect_genes)
+        
+    all_module_genes = list(set(all_module_genes))
+    if len(all_module_genes)==0:
+        print("No Intersection of Genes!!")
+        return [],[]
+    
+    geneExpression=geneExpression[all_module_genes].T.drop_duplicates().T
+    
+    print("\n==============================================================\n")
+    print("\n After Intersection! \n")
+    all_geneExpr_genes = set(geneExpression.columns.values.tolist())
+    for module_i,genes in module_genes_new.items():
+        cur_intersect_genes = list(set(genes).intersection(all_geneExpr_genes))
+        if len(cur_intersect_genes)!=0:
+            module_genes_new[module_i]=cur_intersect_genes
+        print("\n Cur module_i:{0}, intersection of genes:{1} \n".format(module_i,cur_intersect_genes))
+
+    return geneExpression, module_genes_new
 
 
 def check_intersect_genes(geneExpression_genes, modules_genes):
