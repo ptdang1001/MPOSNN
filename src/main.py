@@ -65,14 +65,11 @@ def main(args):
     
     
     # remove non overlap genes
-    geneExpression = intersect_samples_genes(geneExpression,modules_genes)
+    geneExpression,  modules_genes= intersect_samples_genes(geneExpression,modules_genes)
     if len(geneExpression)==0:
         print("\n No Intersection of Genes between Data and Moduels! \n")
         return False
-    #std_mean_col_geneExpression = np.mean(np.std(geneExpression.T.div(geneExpression.max(axis=0), axis=0).T,axis=0))
-    
-    
-    modules_genes = check_intersect_genes(geneExpression.columns.values,modules_genes)
+  
     all_modules = list(modules_genes.keys())
     all_modules.sort()
     
