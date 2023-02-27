@@ -174,7 +174,7 @@ def intersect_samples_genes(geneExpression,modules_genes):
     print("\n After Intersection! \n")
     all_geneExpr_genes = set(geneExpression.columns.values.tolist())
     for module_i,genes in module_genes_new.items():
-        cur_intersect_genes = list(set(genes).intersection(all_geneExpr_genes))
+        cur_intersect_genes = list(set(set(genes).intersection(all_geneExpr_genes)))
         if len(cur_intersect_genes)!=0:
             module_genes_new[module_i]=cur_intersect_genes
         print("\n Cur module_i:{0}, intersection of genes:{1} \n".format(module_i,cur_intersect_genes))
