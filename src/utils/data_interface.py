@@ -64,10 +64,17 @@ def remove_allZero_rowAndCol(factors_nodes):
     factors_nodes = factors_nodes.loc[:, ~(factors_nodes == 0).all(axis=0)]
     return factors_nodes
 
+
 def remove_outside_compounds(factors_nodes):
-    factors_nodes_abs=factors_nodes.abs()
-    row_sum=factors_nodes_abs.sum(axis=1).values
-    factors_nodes=factors_nodes.iloc[row_sum!=1,:]
+    n_factors,n_nodes=factors_nodes.shape
+    keep_idx=[]
+    for i in range(n_factors):
+        if (factors_nodes.iloc[i,:]>=0).all() or (factors_nodes.iloc[i,:]<=0).all():
+            print("remove factor:{0}".format(factors_nodes.index.values[i]))
+            continue
+        else:
+            keep_idx.append(i)
+    factors_nodes=factors_nodes.iloc[keep_idx,:]
     factors_nodes = remove_allZero_rowAndCol(factors_nodes)
     print(SEP_SIGN)
     print("\n compounds_Reactions sample:\n {0} \n".format(factors_nodes))
