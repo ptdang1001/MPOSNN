@@ -1,10 +1,11 @@
-## MPOSNN - Antigen Presentation Pathway.
+## MPOSNN.
 
 ## Change Log
 
-### v0.5
+### v0.6
 - Release the initial version and installation manual
 - Release Antigen Presentation Pathway
+- This version of the algorithm can handle cycles in the graph to some extent.
 
 
 ### To be released soon 
@@ -17,7 +18,7 @@ If you have an interested topic, please feel free to open an [issue](https://git
 ## The computational framework of MPOSNN
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/mposnn.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/tmp/MPOSNN.png">
 </p>
 
 ## Results
@@ -25,7 +26,7 @@ If you have an interested topic, please feel free to open an [issue](https://git
 To benchmark the method, we applied it to the following transcriptomics data. We applied the method to the bulk tissue RNA-seq data of a melanoma data set (GSE91061) collected from patients under anti-CTLA4 and ant-PD1 therapy. In total, we obtained 105 samples from the GSE91061 data set, including 48 PR, 34 SD, and 23 PD patients. We applied the method to this data to compute the sample-wise activity level of the 11 modules. Biologically, we expect the higher level of antigen presentation activity to be associated with a better response. We observed that module 8 (trimming of peptides) and module 11 (T cell level) are significantly associated with responsiveness. 
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_Results.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/GSE91061_Results/GSE91061_Results.png">
 </p>
 
 We further adopted stepwise multi-variate logistic regression to identify the top variables and best model in predicting patients’ response to anti-CTLA4 and ant-PD1 therapy. We also included the total T cell level and cytotoxic CD8+ T cell level predicted by deconvolution analysis and MSI/MSS status predicted by gene expression data. The final selected model is
@@ -34,14 +35,14 @@ $$Response = M_8 + MSI status$$
 , as detailed below. Our analysis suggested the activity level of trimming of peptides and MSI status are predictive of the outcome of immuno-therapy.
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_analysis_results.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/GSE91061_Results/GSE91061_analysis_results.png">
 </p>
 
 
 We further checked how M_8 level varies with respect to responsiveness, MSI status and treatment status. We identified that the level of M_8 is higher in RP and SD patients compared to PD patients in all groups. Interestingly, we found that the level of M_8 shows a significant difference between MSI and MSS patients only for the on-treatment group. Specifically, the PR and SD MSS on treatment patients have a significant increase of M_8 compared to (1) the PR patients MSS on treatment patients and (2) all PD and SD MSI on treatment patients. This observation suggests that increasing antigen presentation activity during anti-CTLA4/PD1 treatment may increase the response for MSS patients. This observation is explainable as the MSS patients who have less neoantigen may demand higher antigen presentations to enable a sufficient T cell recognition.
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_boxplot.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/GSE91061_Results/GSE91061_boxplot.png">
 </p>
 
 
@@ -60,7 +61,7 @@ MPOSNN is implemented by Python3. If you don't have python, please download [Ana
 
 Download MPOSNN:
 ```
-git clone https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway
+git clone https://github.com/ptdang1001/MPOSNN.git
 ```
 
 Install requirements:
@@ -132,20 +133,20 @@ options:
    
    Please see the graph bellow, you can find it in the directory "inputs":
    <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/Antigen_Presentation_pathway.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/tmp/Antigen_Presentation_pathway.png">
    </p>
    
    
    Please see the adjacency matrix bellow, you can find it in the directory "inputs":
    <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules_adj.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/tmp/ANT2_compounds_modules_adj.png">
    </p>
    
 3. Antigen Presentation Pathway reactions and the genes. Modules(Reactions) and contained genes, you can find it in the directory "inputs".
 
    Please see the json file sample bellow:
    <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_modules_genes.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/tmp/ANT2_modules_genes.png">
    </p>
 
 ## Outputs:
