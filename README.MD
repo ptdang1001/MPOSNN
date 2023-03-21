@@ -185,26 +185,17 @@ You can find the results in the directory "outputs", please click [here](https:/
     </p>
 
 
-** Run code with default parameters: **
+
+** Traning and Predicting example: **
 ```
 # just copy your data into the directory "inputs"
 # The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
+
 #python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your adj matrix file" --modules_genes_file_name "your modules and genes file" --module_source "your pathway name" --experiment_name "your experiment name"
 
 python src/main.py --geneExpression_file_name TCGA.csv.gz --compounds_modules_file_name ANT2_compounds_modules.csv --modules_genes_file_name ANT2_modules_genes.json --module_source ANT2 --experiment_name FluxEstimation
-
-
-```
-
-** Traning and Predicting example: **
-```
-# just copy your data into the directory "inputs"
-# The algorithm saves the model automatically
-# you can get the results in the directory "outputs"
-
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 0 --do_predict_snn 1
 
 ```
 
@@ -214,7 +205,10 @@ python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --
 # you have to train the model at least once befor this predicting only step. We don't offer default trained model. 
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 0 --do_predict_snn 1
+#python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --modules_genes_file_name "your modules and genes file" --module_source "your pathway name" --experiment_name "your experiment name" --load_weights_folder "The folder name you got from the tranning step" --do_train_snn 0
+
+python src/main.py --geneExpression_file_name TCGA.csv.gz --modules_genes_file_name ANT2_modules_genes.json --module_source ANT2 --experiment_name FluxEstimation --load_weights_folder TCGA_ANT2_FluxEstimation_00001 --do_train_snn 0
+
 
 ```
 
