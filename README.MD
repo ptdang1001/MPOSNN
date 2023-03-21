@@ -66,7 +66,7 @@ git clone https://github.com/ptdang1001/MPOSNN.git
 
 Install requirements:
 ```
-cd MPOSNN-Antigen_Presentation_Pathway
+cd MPOSNN
 conda install --file requirements
 conda install pytorch torchvision -c pytorch
 pip install --user magic-impute
@@ -77,9 +77,10 @@ pip install --user magic-impute
 You can see the input arguments for MPOSNN by help option:
 ```
 python src/main.py --help
-usage: src/main.py [-h] [--input_dir INPUT_DIR] [--output_dir OUTPUT_DIR] [--geneExpression_file_name GENEEXPRESSION_FILE_NAME] [--compounds_modules_file_name COMPOUNS_MODULES_FILE_NAME] [--modules_genes_file_name MODULES_GENES_FILE_NAME]
-               [--cycle_detection CYCLE_DETECTION] [--epoch_limit_all EPOCH_LIMIT_ALL] [--imbalance_loss_limit_all IMBALANCE_LOSS_LIMIT_ALL] [--save_predictions SAVE_PREDICTIONS] [--pca_components_selection PCA_COMPONENTS_SELECTION] [--n_epoch_scfea N_EPOCH_SCFEA]
-               [--n_epoch_mpo N_EPOCH_MPO] [--n_epoch_snn N_EPOCH_SNN] [--do_train_snn DO_TRAIN_SNN] [--do_predict_snn DO_PREDICT_SNN] [--output_grad_snn OUTPUT_GRAD_SNN]
+usage: main.py [-h] [--input_dir INPUT_DIR] [--output_dir OUTPUT_DIR] [--geneExpression_file_name GENEEXPRESSION_FILE_NAME] [--compounds_modules_file_name COMPOUNDS_MODULES_FILE_NAME] [--modules_genes_file_name MODULES_GENES_FILE_NAME] [--n_epoch_all N_EPOCH_ALL]
+               [--imbalance_loss_limit_all IMBALANCE_LOSS_LIMIT_ALL] [--save_predictions SAVE_PREDICTIONS] [--pca_components_selection PCA_COMPONENTS_SELECTION] [--do_imputation DO_IMPUTATION] [--experiment_name EXPERIMENT_NAME] [--module_source MODULE_SOURCE]
+               [--load_checkpoints_dir LOAD_CHECKPOINTS_DIR] [--load_weights_folder LOAD_WEIGHTS_FOLDER] [--n_epoch_scfea N_EPOCH_SCFEA] [--n_epoch_mpo N_EPOCH_MPO] [--n_epoch_snn N_EPOCH_SNN] [--do_train_snn DO_TRAIN_SNN] [--n_train_batch_snn N_TRAIN_BATCH_SNN]
+               [--do_predict_snn DO_PREDICT_SNN] [--output_grad_snn OUTPUT_GRAD_SNN]
 
 MPOSNN: A Massage Passing Optimizer-Based Supervised Neural Network Model to Estimate Cell-Wise Metabolic Using Single Cell RNA-seq Data.
 
@@ -91,14 +92,12 @@ options:
                         The outputs directory, you can find all outputs in this directory.
   --geneExpression_file_name GENEEXPRESSION_FILE_NAME
                         The scRNA-seq file name.
-  --compounds_modules_file_name COMPOUNS_MODULES_FILE_NAME
-                        The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are
-                        provided in /data/ folder.
+  --compounds_modules_file_name COMPOUNDS_MODULES_FILE_NAME
+                        The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are provided in /data/
+                        folder.
   --modules_genes_file_name MODULES_GENES_FILE_NAME
-                        The json file contains genes for each module. We provide human and mouse two models in scFEA. For human model, please use module_gene_m168.csv which is default. All candidate moduleGene files are provided in /data/ folder.
-  --cycle_detection CYCLE_DETECTION
-                        Remove the cycles in the graph. 0=False, 1=True
-  --epoch_limit_all EPOCH_LIMIT_ALL
+                        The json file contains genes for each module. We provide human and mouse two models in scFEA.
+  --n_epoch_all N_EPOCH_ALL
                         The user defined early stop Epoch(the whole framework)
   --imbalance_loss_limit_all IMBALANCE_LOSS_LIMIT_ALL
                         The user defined early stop imbalance loss.
@@ -106,6 +105,12 @@ options:
                         Save results. 0=False, 1=True
   --pca_components_selection PCA_COMPONENTS_SELECTION
                         Apply PCA to reduce the dimension of features. 0=False, 1=True
+  --do_imputation DO_IMPUTATION
+                        Imputation on the input gene expression matrix. 0=False, 1=True
+  --experiment_name EXPERIMENT_NAME
+  --module_source MODULE_SOURCE
+  --load_checkpoints_dir LOAD_CHECKPOINTS_DIR
+  --load_weights_folder LOAD_WEIGHTS_FOLDER
   --n_epoch_scfea N_EPOCH_SCFEA
                         User defined Epoch for scFEA training.
   --n_epoch_mpo N_EPOCH_MPO
@@ -114,11 +119,11 @@ options:
                         User defined Epoch for Supervised Neural Network training.
   --do_train_snn DO_TRAIN_SNN
                         Train the SNN model, 0=False, 1=True.
+  --n_train_batch_snn N_TRAIN_BATCH_SNN
   --do_predict_snn DO_PREDICT_SNN
-                        Predict the flux values via the trained SNN model, 0=False, 1=True. FYI: If you have already trained the SNN model, SNN saves the model automatically, then you can set 
-  --do_train_snn 0 and --do_predict_snn 1 to predict the flux valuesdirectly.
+                        Predict the flux values via the trained SNN model, 0=False, 1=True. FYI: If you have already trained the SNN model, SNN saves the model automatically, then you can set --do_train_snn 0 and --do_predict_snn 1 to predict the flux values directly.
   --output_grad_snn OUTPUT_GRAD_SNN
-                      Save the gradients on each gene.
+                        Save the gradients on each gene.
 
 
 ```
@@ -126,7 +131,7 @@ options:
 ## Inputs:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
-2. Antigen Presentation Pathway data, Adjacency matrix, a factor graph
+2. Pathway data, Adjacency matrix, a factor graph
    - 1:="The parent node(reaction M_i) of a compound", 
    - -1:="The child node(reaction M_i) of a compound", 
    - 0:="No connection bewteen compound and reaction".  
@@ -186,7 +191,10 @@ You can find the results in the directory "outputs", please click [here](https:/
 # The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name"
+#python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your adj matrix file" --modules_genes_file_name "your modules and genes file" --module_source "your pathway name" --experiment_name "your experiment name"
+
+python src/main.py --geneExpression_file_name TCGA.csv.gz --compounds_modules_file_name ANT2_compounds_modules.csv --modules_genes_file_name ANT2_modules_genes.json --module_source ANT2 --experiment_name FluxEstimation
+
 
 ```
 
@@ -196,7 +204,7 @@ python src/main.py --geneExpression_file_name "your scRNA-seq data file name"
 # The algorithm saves the model automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 1 --do_predict_snn 1
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 0 --do_predict_snn 1
 
 ```
 
