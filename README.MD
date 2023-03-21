@@ -1,17 +1,14 @@
-##  MPOSNN: A Massage Passing Optimizer-Based Supervised Neural Network Model to Estimate Cell-Wise Metabolic Using Single Cell RNA-seq Data.
+## MPOSNN - Antigen Presentation Pathway.
 
 ## Change Log
 
 ### v0.5
-- Release the initial version and installtion manual
-- Release human complete metabolic flux modules
+- Release the initial version and installation manual
+- Release Antigen Presentation Pathway
 
 
 ### To be released soon 
 If you have an interested topic, please feel free to open an [issue](https://github.com/ptdang1001/MPOSNN/issues) or I can also merge your completed function into main branch
-
-
-
 
 ## Introduction
 
@@ -20,8 +17,33 @@ If you have an interested topic, please feel free to open an [issue](https://git
 ## The computational framework of MPOSNN
 
 <p align="center">
-  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/inputs/mposnn.png">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/mposnn.png">
 </p>
+
+## Results
+
+To benchmark the method, we applied it to the following transcriptomics data. We applied the method to the bulk tissue RNA-seq data of a melanoma data set (GSE91061) collected from patients under anti-CTLA4 and ant-PD1 therapy. In total, we obtained 105 samples from the GSE91061 data set, including 48 PR, 34 SD, and 23 PD patients. We applied the method to this data to compute the sample-wise activity level of the 11 modules. Biologically, we expect the higher level of antigen presentation activity to be associated with a better response. We observed that module 8 (trimming of peptides) and module 11 (T cell level) are significantly associated with responsiveness. 
+
+<p align="center">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_Results.png">
+</p>
+
+We further adopted stepwise multi-variate logistic regression to identify the top variables and best model in predicting patients’ response to anti-CTLA4 and ant-PD1 therapy. We also included the total T cell level and cytotoxic CD8+ T cell level predicted by deconvolution analysis and MSI/MSS status predicted by gene expression data. The final selected model is
+$$Response = M_8 + MSI status$$
+
+, as detailed below. Our analysis suggested the activity level of trimming of peptides and MSI status are predictive of the outcome of immuno-therapy.
+
+<p align="center">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_analysis_results.png">
+</p>
+
+
+We further checked how M_8 level varies with respect to responsiveness, MSI status and treatment status. We identified that the level of M_8 is higher in RP and SD patients compared to PD patients in all groups. Interestingly, we found that the level of M_8 shows a significant difference between MSI and MSS patients only for the on-treatment group. Specifically, the PR and SD MSS on treatment patients have a significant increase of M_8 compared to (1) the PR patients MSS on treatment patients and (2) all PD and SD MSI on treatment patients. This observation suggests that increasing antigen presentation activity during anti-CTLA4/PD1 treatment may increase the response for MSS patients. This observation is explainable as the MSS patients who have less neoantigen may demand higher antigen presentations to enable a sufficient T cell recognition.
+
+<p align="center">
+  <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/GSE91061_Results/GSE91061_boxplot.png">
+</p>
+
 
 ## Requirements and Installation
 
@@ -38,12 +60,12 @@ MPOSNN is implemented by Python3. If you don't have python, please download [Ana
 
 Download MPOSNN:
 ```
-git clone https://github.com/ptdang1001/MPOSNN
+git clone https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway
 ```
 
 Install requirements:
 ```
-cd MPOSNN
+cd MPOSNN-Antigen_Presentation_Pathway
 conda install --file requirements
 conda install pytorch torchvision -c pytorch
 pip install --user magic-impute
@@ -103,51 +125,87 @@ options:
 ## Inputs:
 
 1. scRNA-seq data(rows:genes, columns:samples/cells)
-2. Adjacency matrix a factor graph, you can choose one from "inputs"
-   - 1:="The parent node(compound) of a reaction(M_i).", 
-   - -1:="The child node(compound) of a reaction(M_i)", 
-   - 0:="No connection bewteen compound and reaction". 
-3. Modules(Reactions) and contained genes, you can choose one from "inputs".
+2. Antigen Presentation Pathway data, Adjacency matrix, a factor graph
+   - 1:="The parent node(reaction M_i) of a compound", 
+   - -1:="The child node(reaction M_i) of a compound", 
+   - 0:="No connection bewteen compound and reaction".  
+   
+   Please see the graph bellow, you can find it in the directory "inputs":
+   <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/Antigen_Presentation_pathway.png">
+   </p>
+   
+   
+   Please see the adjacency matrix bellow, you can find it in the directory "inputs":
+   <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_compounds_modules_adj.png">
+   </p>
+   
+3. Antigen Presentation Pathway reactions and the genes. Modules(Reactions) and contained genes, you can find it in the directory "inputs".
+
+   Please see the json file sample bellow:
+   <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/inputs/ANT2_modules_genes.png">
+   </p>
 
 ## Outputs:
 
-You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/main/outputs) to see the output examples(Just for testing, no mearning):
+You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway/outputs) to see the output examples(Just for testing, no mearning):
 1. "flux_scfea.csv", flux values from scFEA, rows:samples, columns:modules, each entry is a flux value.
+  <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scfea.png">
+  </p>
+
 2. "flux_snn.csv", flux values from SNN, rows:samples, columns:modules, each entry is a flux value.
+  <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_snn.png">
+  </p>
+  
+  
 3. "flux_snn_grad.csv", the gradients, rows:genes, columns:samples, each value represents the partial derivative of the model with respect to the gene.
+  <p align="center">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_snn_grad.png">
+  </p>
+
 4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
+
 5. "flux_scFEA_MPO_SNN_std_scale_imbalance.png", the analysis of predicted flux values.  
     - 5.1. "module wise std":= $\frac{ \sum std(Y_{:,j}^{predicted})}{n}$
     - 5.2. "all mean scale":= $\frac{\sum \sum Y_{i,j}^{predicted}}{M*N}$
     - 5.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
+    
+    <p align="center">
+      <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scFEA_MPO_SNN_std_scale_imbalance.png">
+    </p>
 
 
 ** Run code with default parameters: **
 ```
-# just copy your data to the directory "inputs"
+# just copy your data into the directory "inputs"
 # The algorithm saves the model weights automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name"
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name"
 
 ```
 
 ** Traning and Predicting example: **
 ```
-# just copy your data to the directory "inputs"
-# The algorithm saves the model weights automatically
+# just copy your data into the directory "inputs"
+# The algorithm saves the model automatically
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 1 --do_predict_snn 1
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 1 --do_predict_snn 1
 
 ```
 
 ** No Training, Predicting only example: **
 ```
-# just copy your data to the directory "inputs"
+# just copy your data into the directory "inputs"
+# you have to train the model at least once befor this predicting only step. We don't offer default trained model. 
 # you can get the results in the directory "outputs"
 
-python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --compounds_modules_file_name "your factor graph adj matrix file name" --modules_genes_file_name "your reactions and genes file name" --do_train_snn 0 --do_predict_snn 1
+python src/main.py --geneExpression_file_name "your scRNA-seq data file name" --do_train_snn 0 --do_predict_snn 1
 
 ```
 
