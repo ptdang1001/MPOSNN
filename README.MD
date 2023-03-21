@@ -154,18 +154,18 @@ options:
 You can find the results in the directory "outputs", please click [here](https://github.com/ptdang1001/MPOSNN/tree/Antigen_Presentation_Pathway/outputs) to see the output examples(Just for testing, no mearning):
 1. "flux_scfea.csv", flux values from scFEA, rows:samples, columns:modules, each entry is a flux value.
   <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scfea.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/outputs/tmp/flux_scfea.png">
   </p>
 
 2. "flux_snn.csv", flux values from SNN, rows:samples, columns:modules, each entry is a flux value.
   <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_snn.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/outputs/tmp/flux_snn.png">
   </p>
   
   
 3. "flux_snn_grad.csv", the gradients, rows:genes, columns:samples, each value represents the partial derivative of the model with respect to the gene.
   <p align="center">
-    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_snn_grad.png">
+    <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/outputs/tmp/flux_snn_grad.png">
   </p>
 
 4. "Compounds_Modules_FactorGraph_original.png", the visiulization of Factor Graph.
@@ -176,7 +176,7 @@ You can find the results in the directory "outputs", please click [here](https:/
     - 5.3. "sample wise imbalance loss":= $\frac{\sum ImbalanceLoss(Y_{i,:})}{M}$
     
     <p align="center">
-      <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/Antigen_Presentation_Pathway/outputs/flux_scFEA_MPO_SNN_std_scale_imbalance.png">
+      <img width="80%" src="https://github.com/ptdang1001/MPOSNN/blob/main/outputs/tmp/flux_scFEA_MPO_SNN_std_scale_imbalance.png">
     </p>
 
 
