@@ -7,6 +7,10 @@
 - Release Antigen Presentation Pathway
 - This version of the algorithm can handle cycles in the graph to some extent.
 
+### v0.5
+- Release the initial version and installation manual
+- Release Antigen Presentation Pathway
+
 
 ### To be released soon 
 If you have an interested topic, please feel free to open an [issue](https://github.com/ptdang1001/MPOSNN/issues) or I can also merge your completed function into main branch
