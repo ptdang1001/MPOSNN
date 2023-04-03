@@ -344,7 +344,7 @@ def parse_arguments(parser):
                         help="The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are provided in /data/ folder.")
     parser.add_argument('--modules_genes_file_name', type=str, default='NA',
                         help="The json file contains genes for each module. We provide human and mouse two models in scFEA.")
-    parser.add_argument('--n_epoch_all', type=int, default=100,
+    parser.add_argument('--n_epoch_all', type=int, default=300,
                         help="The user defined early stop Epoch(the whole framework)")
     parser.add_argument('--imbalance_loss_limit_all', type=float, default=0.01,
                         help="The user defined early stop imbalance loss.")
@@ -364,11 +364,11 @@ def parse_arguments(parser):
                         help="User defined Epoch for scFEA training.")
 
     # parameters for bp_balance
-    parser.add_argument('--n_epoch_mpo', type=int, default=50,
+    parser.add_argument('--n_epoch_mpo', type=int, default=30,
                         help="User defined Epoch for Message Passing Optimizer.")
 
     # parameters for snn
-    parser.add_argument('--n_epoch_snn', type=int, default=300,
+    parser.add_argument('--n_epoch_snn', type=int, default=200,
                         help="User defined Epoch for Supervised Neural Network training.")
     parser.add_argument('--do_train_snn', type=int, default=1,
                         help="Train the SNN model, 0=False, 1=True.")
