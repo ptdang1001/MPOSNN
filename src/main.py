@@ -301,11 +301,13 @@ def main(args):
         #cur_title_end = ""
         #cur_activation_function = "TanhShrinkage"
         #cur_title_end = cur_title_end + cur_activation_function
+        '''
         plot_std_scale_imbalance_in_one(std_mean_col_scfea_all, std_mean_col_mpo_all, std_mean_col_snn_all, std_mean_col_mposnn_all,
                                         scale_mean_all_scfea_all, scale_mean_all_mpo_all, scale_mean_all_snn_all,scale_mean_all_mposnn_all,
                                         imbalanceLoss_mean_scfea_all, imbalanceLoss_mean_mpo_all,
                                         imbalanceLoss_mean_snn_all, imbalanceLoss_mean_mposnn_all,
                                         args)
+        '''
         # sys.exit(1)
 
         if std_scale_imbalanceLoss['imbalanceLoss_mean_snn'] < minImbalance_flux_snn and std_scale_imbalanceLoss[
@@ -334,10 +336,10 @@ def main(args):
 
     # flux_snn_final = flux_snn_final.T.div(flux_snn_final.max(axis=0), axis=0).T
     # flux_snn_final = min_max_normalization(flux_snn_final, by='col')
-    flux_snn_final.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
+    #flux_snn_final.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
 
     # flux_snn_mpo_final = min_max_normalization(flux_snn_mpo_final, by='col')
-    flux_snn_mpo_final.to_csv(args.output_dir + 'flux_snn_mpo.csv', index=True, header=True)
+    #flux_snn_mpo_final.to_csv(args.output_dir + 'flux_snn_mpo.csv', index=True, header=True)
 
 
     flux_mposnn_final.to_csv(args.output_dir + 'flux_mposnn.csv', index=True, header=True)
