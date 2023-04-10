@@ -402,7 +402,7 @@ def save_grad_file(args):
     module_genes.sort()
     grad_all = grad_all[module_genes]
     grad_all = grad_all.T
-    grad_all.to_csv(args.output_dir + "flux_snn_grad.csv", index=True, header=True)
+    grad_all.to_csv(args.output_dir + "flux_mposnn_grad.csv", index=True, header=True)
     
     return True
 
