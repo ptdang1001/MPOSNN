@@ -175,10 +175,24 @@ def update_compoundsModules_modulesGenes(compounds_modules, modules_genes, geneE
         genes_new.extend(modules_genes[module])
     modules_genes = modules_genes_new
     
-    genes_new = list(set(genes_new))
+    genes_new = list(set(genes_new).intersection(set(geneExpression.columns.values.tolist())))
     geneExpression = geneExpression[genes_new]
-    
-    return compounds_modules, modules_genes, geneExpression
+
+
+    #update genes in modules_genes
+    modules_genes_new_new = {}
+    for module_i in modules_genes_new.keys():
+        cur_genes = modules_genes_new[module_i]
+        cur_genes = list(set(cur_genes).intersection(set(genes_new)))
+        if len(cur_genes) == 0: continue
+        modules_genes_new_new[module_i] = cur_genes
+
+    # update modules in compounds_modules
+    all_modules = list(set(list(modules_genes_new_new.keys())).intersection(set(compounds_modules.columns.values.tolist())))
+    all_modules.sort()
+    compounds_modules = compounds_modules[all_modules]
+
+    return compounds_modules, modules_genes_new_new, geneExpression
 
 
 def perturb_modules(samples_modules, module_info, sm_id):
