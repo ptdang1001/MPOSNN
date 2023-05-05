@@ -1,0 +1,42 @@
+﻿M_id,M_name,C_in,C_in_name,C_out,C_out_name,SL
+M_1,Glucose import -> Glucose,C00267_i,Glucose import,C00267,Glucose,E->C
+M_2,Glucose -> G3P,C00267,Glucose,C00118,G3P,C
+M_3,G3P -> 3PD,C00118,G3P,C00197,3PD,C
+M_4,3PD -> Pyruvate_Cyto,C00197,3PD,C00022_c,Pyruvate_Cyto,C
+M_5,G3P -> PRPP,C00118,G3P,C00119,PRPP,C
+M_6,3PD -> Serine,C00197,3PD,C00065,Serine,C
+M_7,Pyruvate_Cyto -> Lactate,C00022_c,Pyruvate_Cyto,C00186,Lactate,C
+M_8,Lactate -> Lactate_out,C00186,Lactate,C00186_o,Lactate_out,C
+M_9,Pyruvate_Cyto -> Acetyl-CoA,C00022_c,Pyruvate_Cyto,C00024,Acetyl-CoA,M
+M_10,glutamate_in2 -> Glutamate_Cyto,C00000,glutamate_in2,C00025_c,Glutamate_Cyto,C
+M_11,glutamine_in2 -> Glutamine_Cyto,C00000,glutamine_in2,C00064_c,Glutamine_Cyto,C
+M_12,glutamate_in -> Glutamate_Cyto,C00000,glutamate_in,C00025_c,Glutamate_Cyto,C
+M_13,Glutamine_in -> Glutamine_Cyto,C00000,Glutamine_in,C00064_c,Glutamine_Cyto,C
+M_14,Glutamine_Cyto -> glutamine_out,C00064_c,Glutamine_Cyto,C00000,glutamine_out,C
+M_15,Glutamate_Cyto -> glutamate_out,C00025_c,Glutamate_Cyto,C00000,glutamate_out,C
+M_16,Glutamine_Cyto -> Glutamine_Mito,C00064_c,Glutamine_Cyto,C00064,Glutamine_Mito,C->M
+M_17,Glutamine_Mito -> Glutamate_Mito,C00064,Glutamine_Mito,C00025,Glutamate_Mito,M
+M_18,Glutamate_Mito -> Glutamate_Cyto,C00025,Glutamate_Mito,C00025_c,Glutamate_Cyto,M->C
+M_19,Acetyl-CoA+Oxaloacetate -> Citrate_Mito,C00024+C00036,Acetyl-CoA+Oxaloacetate,C00158,Citrate_Mito,M
+M_20,Oxaloacetate+Glutamate_Mito-> 2OG_Mito+Asparate,C00036+C00025,Oxaloacetate+Glutamate_Mito,C00026+C00049,2OG_Mito+Asparate,M
+M_21,Citrate_Mito -> Itaconic Acid,C00158,Citrate_Mito,C00490,Itaconic Acid ,M
+M_22,Itaconic Acid -> 2OG_Mito,C00490,Itaconic Acid ,C00026,2OG_Mito,M
+M_23,Citrate_Mito -> Citrate_Cyto,C00158,Citrate_Mito,C00158_c,Citrate_Cyto,M->C
+M_24,Citrate_Cyto -> Fatty_acids,C00158_c,Citrate_Cyto,F00001,Fatty_acids,C
+M_25,Glutamate_Mito+L-Cysteine -> GSH,C00025+C00097,Glutamate_Mito+L-Cysteine,C00051,GSH,M
+M_26,GSH_in -> GSH,C00051_i,GSH_in,C00051,GSH,M
+M_27,GSH -> GSH_out,C00051,GSH,C00051_o,GSH_out,M
+M_28,GSH -> GSSG,C00051,GSH,C00127,GSSG,M
+M_29,GSSG -> GSH,C00127,GSSG,C00051,GSH,M
+M_30,L-Cysteine_IN -> L-Cysteine,C00097_i,L-Cysteine_IN,C00097,L-Cysteine,M
+M_31,L-Cysteine -> OUT,C00097,L-Cysteine,C00097_o,L-Cysteine_OUT,M
+M_32,Glutamate_Mito-> 2OG_Mito,C00025,Glutamate_Mito,C00026 ,2OG_Mito,M
+M_33,Glutamate_GABA,C00025,Glutamate_Mito,C00334,GABA,M
+M_34,2OG_2HG,C00026,2OG_Mito,C02630,2HG,M
+M_35,2OG_Mito->2OG_Cyto,C00026,2OG_Mito,C00027_c,2OG_Cyto,M->C
+M_36,2OG_Succinyl-CoA,C00026,2OG_Mito,C00091,Succinyl-CoA,M
+M_37,GABA_Succinate,C00334,GABA,C00042,Succinate,M
+M_38,Succinate_Malate,C00042,Succinate,C00149,Malate,M
+M_39,Succinyl-CoA_Succinate,C00091,Succinyl-CoA,C00042,Succinate,M
+M_40,Malate_Oxaloacetate,C00149,Malate,C00036,Oxaloacetate,M
+M_41,Asparate->Asparate_out,C00049,Asparate,C00049_o,Asparate_out,M->C
