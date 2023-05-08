@@ -370,7 +370,7 @@ def parse_arguments(parser):
                         help="The user defined early stop imbalance loss.")
     parser.add_argument('--save_predictions', type=int, default=1,
                         help="Save results. 0=False, 1=True")
-    parser.add_argument('--pca_components_selection', type=int, default=1,
+    parser.add_argument('--pca_components_selection', type=int, default=0,
                         help="Apply PCA to reduce the dimension of features. 0=False, 1=True")
     parser.add_argument('--do_imputation', type=int, default=0,
                         help="Imputation on the input gene expression matrix. 0=False, 1=True")
