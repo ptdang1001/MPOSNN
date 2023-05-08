@@ -67,10 +67,6 @@ def main(args):
                                                                                             modules_genes,
                                                                                             geneExpression)
 
-    # plot the graph again after removing invalid modules and compounds
-    if args.do_train_snn == 1 and args.do_predict_snn == 1:
-        plot_FactorGraph(compounds_modules, title_name='compounds_modules_connected',
-                         save_path=args.output_dir + 'compounds_modules_connected.png')
 
     # imputation if too many missing values
     if args.do_imputation == 1:
@@ -116,6 +112,10 @@ def main(args):
         snn_history_weights_dir = args.output_dir + "SNN/model_weights_checkpoints/"
         init_dir(snn_history_weights_dir)
     
+    # plot the graph again after removing invalid modules and compounds
+    if args.do_train_snn == 1 and args.do_predict_snn == 1:
+        plot_FactorGraph(compounds_modules, title_name='compounds_modules_connected',
+                         save_path=args.output_dir + 'compounds_modules_connected.png')
     
     # no training, only predicting by saved supervised Neural Network Parameters
     if args.do_train_snn == 0 and args.do_predict_snn == 1:
