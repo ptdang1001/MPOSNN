@@ -547,22 +547,25 @@ def plot_FactorGraph(compounds_flux, title_name, save_path):
     #colors = [BDG.nodes[i]['color'] for i in BDG.nodes()]
     #shapes = [BDG.nodes[i]['shape'] for i in BDG.nodes()]
 
-    figure(dpi=1200)
+    figure(figsize=(40, 30),dpi=400)
 
     # draw graph with labels
     pos = nx.nx_pydot.graphviz_layout(BDG)
-    nx.draw(BDG, pos, with_labels=True)
+    node_size = 1000
+    nx.draw_networkx(BDG, pos, with_labels=True)
     nx.draw_networkx_nodes(BDG,
                            pos,
                            nodelist=compounds_flux.columns.values,
                            node_color="yellow",
-                           node_shape='o')
+                           node_shape='o',
+                           node_size=node_size)
     nx.draw_networkx_nodes(BDG,
                            pos,
                            nodelist=compounds_flux.index.values,
                            node_color="lightblue",
-                           node_shape='s')
-    nx.draw_networkx_edges(BDG, pos)
+                           node_shape='s',
+                           node_size=node_size)
+    nx.draw_networkx_edges(BDG, pos, width=3.0, arrowsize=40)
     plt.title(title_name)
     # plt.show()
     plt.savefig(save_path)
