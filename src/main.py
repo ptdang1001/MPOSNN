@@ -45,27 +45,6 @@ def main(args):
     print("Cur Input parameters:\n{0}\n".format(args))
     print(SEP_SIGN)
 
-    # Init the output dir
-    output_folder = None
-    if args.do_train_snn == 1 and args.do_predict_snn == 1:
-        args.output_dir, output_folder = get_output_path(args)
-        args.load_checkpoints_dir = args.output_dir
-
-        # make output dir if not exist
-        init_dir(args.output_dir)
-
-        # init the outputs dir
-        tmp_flux_res_save_dir = args.output_dir + 'tmp_flux_res/'
-        init_dir(tmp_flux_res_save_dir)
-
-        # snn_final_weights_dir = "./src/SNN/final_model_weights/"
-        snn_final_weights_dir = args.output_dir + "SNN/final_model_weights/"
-        init_dir(snn_final_weights_dir)
-
-        # snn_history_weights_dir = "./src/SNN/model_weights_checkpoints/"
-        snn_history_weights_dir = args.output_dir + "SNN/model_weights_checkpoints/"
-        init_dir(snn_history_weights_dir)
-
     # load gene expression data
     geneExpression = load_geneExpression(
         args)  # geneExpression is the gene expression data, cols:=samples/cells, rows:=genes, but the data will be transposed to rows:=samples/cells, cols:=genes automatically
@@ -115,6 +94,29 @@ def main(args):
     geneExpr_scaled = scaler.fit_transform(geneExpression.values.copy())
     geneExpression = pd.DataFrame(geneExpr_scaled, index=geneExpression.index, columns=geneExpression.columns)
 
+    
+     # Init the output dir
+    output_folder = None
+    if args.do_train_snn == 1 and args.do_predict_snn == 1:
+        args.output_dir, output_folder = get_output_path(args)
+        args.load_checkpoints_dir = args.output_dir
+
+        # make output dir if not exist
+        init_dir(args.output_dir)
+
+        # init the outputs dir
+        tmp_flux_res_save_dir = args.output_dir + 'tmp_flux_res/'
+        init_dir(tmp_flux_res_save_dir)
+
+        # snn_final_weights_dir = "./src/SNN/final_model_weights/"
+        snn_final_weights_dir = args.output_dir + "SNN/final_model_weights/"
+        init_dir(snn_final_weights_dir)
+
+        # snn_history_weights_dir = "./src/SNN/model_weights_checkpoints/"
+        snn_history_weights_dir = args.output_dir + "SNN/model_weights_checkpoints/"
+        init_dir(snn_history_weights_dir)
+    
+    
     # no training, only predicting by saved supervised Neural Network Parameters
     if args.do_train_snn == 0 and args.do_predict_snn == 1:
         print("\n Predicting Only....... \n")
