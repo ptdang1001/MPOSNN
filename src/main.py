@@ -90,6 +90,34 @@ def main(args):
     geneExpr_scaled = scaler.fit_transform(geneExpression.values.copy())
     geneExpression = pd.DataFrame(geneExpr_scaled, index=geneExpression.index, columns=geneExpression.columns)
 
+    # no training, only predicting by saved supervised Neural Network Parameters
+    if args.do_train_snn == 0 and args.do_predict_snn == 1:
+        print("\n Predicting Only....... \n")
+
+        args.load_checkpoints_dir = args.output_dir + args.load_weights_folder + '/'
+        cur_data_name = args.geneExpression_file_name.split('.csv')[0]
+        cur_module_source = args.module_source
+        args.output_dir = args.output_dir + cur_data_name + '-' + cur_module_source + '_PredictionOnly/'
+        init_dir(args.output_dir)
+
+        samples_modules_snn = snn(geneExpression.copy(), modules_genes.copy(), [], 0, args)
+        if len(samples_modules_snn) == 0:
+            print("Prediction Failed! \n")
+            return False
+
+        # samples_modules_snn = min_max_normalization(samples_modules_snn, by="col")
+        samples_modules_snn.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
+        # print("\n samples_modules_snn:\n {0} \n".format(samples_modules_snn))
+
+        # 2nd step to improve the initial values by Massage Passing Optimizer
+        samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_snn.copy(), args)
+        samples_modules_mpo.to_csv(args.output_dir + 'flux_mposnn.csv', index=True, header=True)
+        print("\n Massage Passing Optimazer Optimization Done! \n")
+        save_grad_file(args)
+        print("\n Prediction Done! \n")
+
+        print("Your Results are saved in: {0}\n".format(args.output_dir))
+        return True
     
      # Init the output dir
     output_folder = None
@@ -117,39 +145,7 @@ def main(args):
         plot_FactorGraph(compounds_modules, title_name='compounds_modules_connected',
                          save_path=args.output_dir + 'compounds_modules_connected.png')
     
-    # no training, only predicting by saved supervised Neural Network Parameters
-    if args.do_train_snn == 0 and args.do_predict_snn == 1:
-        print("\n Predicting Only....... \n")
-
-        args.load_checkpoints_dir = args.output_dir + args.load_weights_folder + '/'
-        cur_data_name = args.geneExpression_file_name.split('.csv')[0]
-        cur_module_source = args.module_source
-
-        if cur_data_name + '-' + cur_module_source in args.load_weights_folder:
-            args.output_dir = args.output_dir + args.load_weights_folder + '_PredictionOnly/'
-            init_dir(args.output_dir)
-        else:
-            args.output_dir = args.output_dir + cur_data_name + '-' + cur_module_source + '_PredictionOnly-' + args.load_weights_folder + '/'
-            init_dir(args.output_dir)
-
-        samples_modules_snn = snn(geneExpression.copy(), modules_genes.copy(), [], 0, args)
-        if len(samples_modules_snn) == 0:
-            print("Prediction Failed! \n")
-            return False
-
-        # samples_modules_snn = min_max_normalization(samples_modules_snn, by="col")
-        samples_modules_snn.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
-        # print("\n samples_modules_snn:\n {0} \n".format(samples_modules_snn))
-
-        # 2nd step to improve the initial values by Massage Passing Optimizer
-        samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_snn.copy(), args)
-        samples_modules_mpo.to_csv(args.output_dir + 'flux_snn_mpoOptimized.csv', index=True, header=True)
-        print("\n Massage Passing Optimazer Optimization Done! \n")
-        save_grad_file(args)
-        print("\n Prediction Done! \n")
-
-        print("Your Results are saved in: {0}\n".format(args.output_dir))
-        return True
+    
 
     # all steps: scfea->mpo<->snn(training,testing,predicting)
 
