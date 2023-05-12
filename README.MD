@@ -2,6 +2,9 @@
 
 ## Change Log
 
+### v0.61
+- Improve the prediction only step.
+
 ### v0.6
 - Release the initial version and installation manual
 - Release Antigen Presentation Pathway
