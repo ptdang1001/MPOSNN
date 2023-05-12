@@ -3,7 +3,9 @@
 ## Change Log
 
 ### v0.61
-- Improve the prediction only step.
+- Release metabolism-related network GGSL-V2
+- Optimize the prediction only step.
+- Optimize the training and testing step.
 
 ### v0.6
 - Release the initial version and installation manual
