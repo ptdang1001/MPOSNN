@@ -315,7 +315,7 @@ def intersect_samples_genes(geneExpression, modules_genes):
         print("No Intersection of Genes!!")
         return [], []
 
-    geneExpression = geneExpression[all_module_genes].T.drop_duplicates().T
+    #geneExpression = geneExpression[all_module_genes].T.drop_duplicates().T
 
     print(SEP_SIGN)
     print("\n After Intersection! \n")
