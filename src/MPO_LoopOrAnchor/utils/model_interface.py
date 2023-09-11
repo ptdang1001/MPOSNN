@@ -558,7 +558,7 @@ class MPO:
 
     # @pysnooper.snoop()
     def get_factor_weight(self, node, cur_factor, res_by="mean"):
-        return 1
+        return 1.0
 
         other_neighbor_nodes = self.factors[cur_factor]["parent_nodes"] + self.factors[cur_factor]["child_nodes"]
         other_neighbor_nodes.remove(node)
@@ -639,13 +639,15 @@ class MPO:
             msg_from_child_nodes += self._msg_nodes2factors[(child_node_i, factor)]
         # print("msg_other_neighbors2child_nodes:\n",msg_other_neighbors2child_nodes)
 
-        msg_factor2node = abs(msg_from_parent_nodes - msg_from_child_nodes)
-        rdm_num = 0.0
+        msg_factor2node = msg_from_parent_nodes - msg_from_child_nodes
+        if msg_factor2node < 0:
+            msg_factor2node = abs(msg_factor2node)
+            if msg_from_parent_nodes!=0 and msg_from_child_nodes!=0:
+                increase_val=  msg_factor2node * 2 / len(parent_nodes)
+                for parent_node_i in parent_nodes:
+                    self.belief[parent_node_i] += increase_val
 
-        self._msg_factors2nodes[(factor, cur_node)] = abs(msg_factor2node + rdm_num)
-
-
-
+        self._msg_factors2nodes[(factor, cur_node)] = msg_factor2node
         return True
 
     # @pysnooper.snoop()
@@ -670,12 +672,11 @@ class MPO:
                     self.get_factor_weight(node, factor_i) * self._msg_factors2nodes[(factor_i, node)]),
                                                                   other_neighbor_factors)) + [
                                          0]) / other_neighbor_factors_len
-            msg_node2factor += float(self.belief[node])
-            msg_node2factor /= 2.0
+            #msg_node2factor += float(self.belief[node])
+            msg_node2factor = 0.7 * msg_node2factor + 0.3 * float(self.belief[node])
         else:
-            msg_node2factor = float(self.belief[node])
-            #msg_node2factor = self._msg_factors2nodes[(cur_factor, node)]
-
+            #msg_node2factor = float(self.belief[node])
+            msg_node2factor = self._msg_factors2nodes[(cur_factor, node)]
         self._msg_nodes2factors[(node, cur_factor)] = msg_node2factor
 
 
@@ -683,27 +684,27 @@ class MPO:
             self.visited_child_nodes[node] = {'parent_factor': cur_factor}
         elif flag == 'child_factor':
             self.visited_parent_nodes[node] = {'child_factor': cur_factor}
-
         return True
 
     def update_msg_node2factors(self, node, parent_factors, child_factors):
         # update the msg(1 node->other factors(the ndoe's parent and child))
         for parent_factor_i in parent_factors:
+            #'''
             if node in self.visited_child_nodes:
-                #'''
                 self._msg_nodes2factors[(node, parent_factor_i)] = self._msg_nodes2factors[
                     (node, self.visited_child_nodes[node]['parent_factor'])]
                 continue
-                #'''
+                
+            #'''
             self.update_msg_node2factor(node, parent_factor_i, parent_factors + child_factors,flag='parent_factor')
 
         for child_factor_i in child_factors:
+            #'''
             if node in self.visited_parent_nodes:
-                #'''
                 self._msg_nodes2factors[(node, child_factor_i)] = self._msg_nodes2factors[
                     (node, self.visited_parent_nodes[node]['child_factor'])]
                 continue
-                #'''
+            #'''
             self.update_msg_node2factor(node, child_factor_i, parent_factors + child_factors,flag='child_factor')
 
 
@@ -718,7 +719,7 @@ class MPO:
                                                              all_neighbor_factors)) + [
                                     0]) / len(all_neighbor_factors)
 
-            self.belief[node_i] = belief_new
+            self.belief[node_i] = (0.4*belief_new + 0.6*self.belief[node_i])
             
         #self.belief = self.belief.div(self.belief.sum(axis=1), axis=0) * 100.0
         return True
