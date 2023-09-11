@@ -1,6 +1,5 @@
 # -*-coding:utf-8-*-
 
-
 # build-in libraries
 import sys
 import argparse
@@ -9,7 +8,10 @@ import magic
 
 # Third-party libraries
 import numpy as np
-import pandas as pd
+#import pandas as pd
+# from sklearn import preprocessing
+#import pytorch_lightning as pl
+#import pysnooper
 
 # my libraries
 from utils.data_interface import load_module
@@ -24,11 +26,10 @@ from utils.data_interface import pca_components_selection
 from utils.data_interface import remove_grad_files
 from utils.data_interface import save_snn_model_weights
 from utils.data_interface import save_grad_file
-from utils.data_interface import update_compoundsModules_modulesGenes
+#from utils.data_interface import update_compoundsModules_modulesGenes
 from utils.data_interface import init_dir
 from utils.data_interface import plot_FactorGraph
 from utils.data_interface import get_output_path
-from sklearn import preprocessing
 
 from scFEA.src.scFEA import scFEA
 from MPO_LoopOrAnchor.mpo import mpo
@@ -38,35 +39,41 @@ from SNN.snn import snn
 SEP_SIGN = '*' * 100
 
 
+#@pysnooper.snoop()
 def main(args):
-    # pl.seed_everything(args.seed)
+    #pl.seed_everything(16)
 
     print(SEP_SIGN)
     print("Cur Input parameters:\n{0}\n".format(args))
     print(SEP_SIGN)
 
+
     # load gene expression data
-    geneExpression = load_geneExpression(
-        args)  # geneExpression is the gene expression data, cols:=samples/cells, rows:=genes, but the data will be transposed to rows:=samples/cells, cols:=genes automatically
+    geneExpression = load_geneExpression(args)  # geneExpression is the gene expression data, cols:=samples/cells, rows:=genes, but the data will be transposed to rows:=samples/cells, cols:=genes automatically
 
     # load the modules(reactions) and the contained genes
     modules_genes = load_modulesGenes(args)
 
+    # sys.exit(1)
+
+    #'''
     # remove non overlap genes
     geneExpression, modules_genes = intersect_samples_genes(geneExpression, modules_genes)
     if len(geneExpression) == 0:
         print("\n No Intersection of Genes between Data and (Modules)Reactions! \n")
         return False
+    #'''
+    #sys.exit(1)
 
     # load the adjacency matrix of the factor graph
-    compounds_modules = load_module(
-        args)  # compouns_modules is the adj matrix of the factor graph (reaction graph), rows:=compounds, columns:=modules
-
+    compounds_modules = load_module(args)  # compouns_modules is the adj matrix of the factor graph (reaction graph), rows:=compounds, columns:=modules
     # intersection of modules in compounds_modules and modules_genes
+    '''
     compounds_modules, modules_genes, geneExpression = update_compoundsModules_modulesGenes(compounds_modules,
                                                                                             modules_genes,
                                                                                             geneExpression)
-
+    '''
+    # sys.exit(1)
 
     # imputation if too many missing values
     if args.do_imputation == 1:
@@ -74,6 +81,9 @@ def main(args):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             geneExpression = magic_operator.fit_transform(geneExpression)
+        #print(f"gene expression sample after imputation:\n {geneExpression} \n")
+
+    # sys.exit(1)
 
     # pca_components_selection, the default is 0, which means no pca_components_selection
     if args.pca_components_selection == 1:
@@ -82,13 +92,11 @@ def main(args):
                                                                          n_components=0.9)
         geneExpression = geneExpression_pca
         modules_genes = modules_genes_pca
-        # print("\n modules_genes_pca: \n {0} \n".format(modules_genes))
-        # print("\n geneExpression_pca: \n {0} \n".format(geneExpression))
 
     # normalize the gene expression data
-    scaler = preprocessing.MinMaxScaler()
-    geneExpr_scaled = scaler.fit_transform(geneExpression.values.copy())
-    geneExpression = pd.DataFrame(geneExpr_scaled, index=geneExpression.index, columns=geneExpression.columns)
+    # scaler = preprocessing.MinMaxScaler()
+    # geneExpr_scaled = scaler.fit_transform(geneExpression.values.copy())
+    # geneExpression = pd.DataFrame(geneExpr_scaled, index=geneExpression.index, columns=geneExpression.columns)
 
     # no training, only predicting by saved supervised Neural Network Parameters
     if args.do_train_snn == 0 and args.do_predict_snn == 1:
@@ -113,13 +121,15 @@ def main(args):
         samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_snn.copy(), args)
         samples_modules_mpo.to_csv(args.output_dir + 'flux_mposnn.csv', index=True, header=True)
         print("\n Massage Passing Optimazer Optimization Done! \n")
-        save_grad_file(args)
-        print("\n Prediction Done! \n")
 
+        if args.pca_components_selection == 0:
+            save_grad_file(args)
+
+        print("\n Prediction Done! \n")
         print("Your Results are saved in: {0}\n".format(args.output_dir))
         return True
-    
-     # Init the output dir
+
+        # Init the output dir
     output_folder = None
     if args.do_train_snn == 1 and args.do_predict_snn == 1:
         args.output_dir, output_folder = get_output_path(args)
@@ -139,13 +149,17 @@ def main(args):
         # snn_history_weights_dir = "./src/SNN/model_weights_checkpoints/"
         snn_history_weights_dir = args.output_dir + "SNN/model_weights_checkpoints/"
         init_dir(snn_history_weights_dir)
-    
+
+    n_samples, n_genes = geneExpression.shape
+    # save the gene expression data
+    if True:
+        geneExpression.T.to_csv(args.output_dir + 'data_gene' + str(n_genes) + '_sample' + str(n_samples) + '.csv.gz',
+                                index=True, header=True, compression='gzip')
+
     # plot the graph again after removing invalid modules and compounds
     if args.do_train_snn == 1 and args.do_predict_snn == 1:
         plot_FactorGraph(compounds_modules, title_name='compounds_modules_connected',
                          save_path=args.output_dir + 'compounds_modules_connected.png')
-    
-    
 
     # all steps: scfea->mpo<->snn(training,testing,predicting)
 
@@ -173,9 +187,14 @@ def main(args):
     #########################################################################################################################
 
     # 1st step to generate the initial values by scFEA
+
     samples_modules_scfea = scFEA(geneExpression.copy(), modules_genes.copy(), compounds_modules.copy(), args)
-    samples_modules_scfea.index = geneExpression.index
-    samples_modules_scfea.columns = compounds_modules.columns
+    #samples_modules_scfea.index = geneExpression.index
+    #samples_modules_scfea.columns = compounds_modules.columns
+
+    #samples_modules_scfea = pd.read_csv("/N/slate/pdang/myProjectsDataRes/20211201FLUXOptimization/result/Mposnn_results/ccle_flux_from_jia/ccle_protein_flux.csv", index_col=0)
+    #samples_modules_scfea += np.random.normal(0, 0, samples_modules_scfea.shape)
+    #samples_modules_scfea = samples_modules_scfea.abs()
     # print("\n samples_modules_scfea:\n {0} \n".format(samples_modules_scfea))
     flux_scfea_final = samples_modules_scfea.copy()
 
@@ -183,8 +202,9 @@ def main(args):
     save_samples_modules(samples_modules_scfea.copy(), 'scfea', 0, args)
     print("\n scFEA Done! \n")
 
+    #sys.exit(1)
     #########################################################################################################################
-    samples_modules_init = samples_modules_scfea.copy()
+    samples_modules_init = samples_modules_scfea.abs().copy()
     cur_step = 0
 
     # threshold to choose snn's result
@@ -210,19 +230,31 @@ def main(args):
         # 2nd step to improve the initial values by Massage Passing Optimizer
         print("\n Massage Passing Optimazer Optimization Running! \n")
         samples_modules_mpo = mpo(compounds_modules.copy(), samples_modules_init.copy(), args)
+        #samples_modules_mpo.to_csv("/N/slate/pdang/myProjectsDataRes/20211201FLUXOptimization/result/Mposnn_results/ccle_flux_from_jia/ccle_protein_flux_mpo.csv", index=True, header=True)
+        samples_modules_scfea = samples_modules_scfea.div(samples_modules_scfea.sum(axis=1), axis=0) * 100.0
+        samples_modules_mpo = samples_modules_mpo.div(samples_modules_mpo.sum(axis=1), axis=0) * 100.0
+        imbalance_loss_scfea = get_imbalanceLoss(compounds_modules, samples_modules_scfea.values)
+        imbalance_loss_mpo = get_imbalanceLoss(compounds_modules, samples_modules_mpo.values)
+        #print("\n imbalance_loss_scfea: {0} \n".format(imbalance_loss_scfea))
+        #print("\n imbalance_loss_mpo: {0} \n".format(imbalance_loss_mpo))
+        #print("\n mean of imbalance_loss_scfea: {0} \n".format(np.mean(imbalance_loss_scfea)))
+        #print("\n mean of imbalance_loss_mpo: {0} \n".format(np.mean(imbalance_loss_mpo)))
+
+        #sys.exit(1)
+
         mpo_save_name = 'snn_labels_mpo'
         if cur_step == 0:
             mpo_save_name = 'scfea_mpoOptimized'
             flux_scfea_mpo_final = samples_modules_mpo.copy()
-            times = 1000.0
+            times = 100.0
             samples_modules_mpo_tmp = samples_modules_mpo.div(samples_modules_mpo.sum(axis=1), axis=0) * times
             minImbalance_flux_mpo = np.mean(get_imbalanceLoss(compounds_modules, samples_modules_mpo_tmp.values))
             maxStd_flux_mpo = np.mean(np.std(samples_modules_mpo_tmp.values, axis=0))
-
         save_samples_modules(samples_modules_mpo.copy(), mpo_save_name, cur_step, args)
+
         print("\n current Massage Passing Optimazer Optimization Done! \n")
-        # print("\n samples_modules_mpo:\n {0} \n".format(samples_modules_mpo))
-        # sys.exit(1)
+        #print("\n samples_modules_mpo:\n {0} \n".format(samples_modules_mpo))
+        #sys.exit(1)
         #########################################################################################################################
 
         # 3rd step to improve the flux values by supervised neuron network
@@ -233,21 +265,19 @@ def main(args):
         samples_modules_snn = snn(geneExpression.copy(), modules_genes.copy(),
                                   samples_modules_mpo_loss_min_target.copy(), cur_step + 1, args)
 
-
         cur_step += 1
 
-        if len(samples_modules_snn) == 0:
+        if len(samples_modules_snn) == 0 and args.pca_components_selection == 0:
             remove_grad_files(minImbalanceMaxStd_flux_snn_epoch, args)
             continue
 
         save_samples_modules(samples_modules_snn, 'snn', cur_step, args)
         print("\n Current Supervised Neural Network Done! \n")
 
-
         if len(flux_mposnn_final) == 0:
-            flux_mposnn_final = (samples_modules_mpo+samples_modules_snn+samples_modules_mpo_loss_min_target)/3.0
+            flux_mposnn_final = (samples_modules_mpo + samples_modules_snn + samples_modules_mpo_loss_min_target) / 3.0
         else:
-            flux_mposnn_final = (flux_mposnn_final+samples_modules_mpo+samples_modules_snn+samples_modules_mpo_loss_min_target)/4.0
+            flux_mposnn_final = (flux_mposnn_final + samples_modules_mpo + samples_modules_snn + samples_modules_mpo_loss_min_target) / 4.0
 
         print("\n samples_modules_scfea:\n {0} \n".format(samples_modules_scfea))
         print("\n samples_modules_mpo:\n {0} \n".format(samples_modules_mpo))
@@ -296,16 +326,16 @@ def main(args):
         # sys.exit(1)
 
         # plot the figures
-        #cur_title_end = ""
-        #cur_activation_function = "TanhShrinkage"
-        #cur_title_end = cur_title_end + cur_activation_function
-        '''
-        plot_std_scale_imbalance_in_one(std_mean_col_scfea_all, std_mean_col_mpo_all, std_mean_col_snn_all, std_mean_col_mposnn_all,
-                                        scale_mean_all_scfea_all, scale_mean_all_mpo_all, scale_mean_all_snn_all,scale_mean_all_mposnn_all,
+        # cur_title_end = ""
+        # cur_activation_function = "TanhShrinkage"
+        # cur_title_end = cur_title_end + cur_activation_function
+        plot_std_scale_imbalance_in_one(std_mean_col_scfea_all, std_mean_col_mpo_all, std_mean_col_snn_all,
+                                        std_mean_col_mposnn_all,
+                                        scale_mean_all_scfea_all, scale_mean_all_mpo_all, scale_mean_all_snn_all,
+                                        scale_mean_all_mposnn_all,
                                         imbalanceLoss_mean_scfea_all, imbalanceLoss_mean_mpo_all,
                                         imbalanceLoss_mean_snn_all, imbalanceLoss_mean_mposnn_all,
                                         args)
-        '''
         # sys.exit(1)
 
         if std_scale_imbalanceLoss['imbalanceLoss_mean_snn'] < minImbalance_flux_snn and std_scale_imbalanceLoss[
@@ -317,12 +347,13 @@ def main(args):
             maxStd_flux_snn = std_scale_imbalanceLoss['std_mean_col_snn']
 
         # print("\n min_snn_step={0} \n".format(minImbalance_flux_snn_epoch))
-        remove_grad_files(minImbalanceMaxStd_flux_snn_epoch, args)
-
+        if args.pca_components_selection == 0:
+            remove_grad_files(minImbalanceMaxStd_flux_snn_epoch, args)
 
     # print("\n max_snn_step={0} \n".format(minImbalance_flux_snn_epoch))
     save_snn_model_weights(minImbalanceMaxStd_flux_snn_epoch, args)
-    save_grad_file(args)
+    if args.pca_components_selection == 0:
+        save_grad_file(args)
 
     # save final flux res
     # flux_scfea_final = flux_scfea_final.T.div(flux_scfea_final.max(axis=0), axis=0).T
@@ -334,15 +365,14 @@ def main(args):
 
     # flux_snn_final = flux_snn_final.T.div(flux_snn_final.max(axis=0), axis=0).T
     # flux_snn_final = min_max_normalization(flux_snn_final, by='col')
-    #flux_snn_final.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
+    flux_snn_final.to_csv(args.output_dir + 'flux_snn.csv', index=True, header=True)
 
     # flux_snn_mpo_final = min_max_normalization(flux_snn_mpo_final, by='col')
-    #flux_snn_mpo_final.to_csv(args.output_dir + 'flux_snn_mpo.csv', index=True, header=True)
-
+    flux_snn_mpo_final.to_csv(args.output_dir + 'flux_snn_mpo.csv', index=True, header=True)
 
     flux_mposnn_final.to_csv(args.output_dir + 'flux_mposnn.csv', index=True, header=True)
 
-    print("All Done! \n")
+    print("\n All Done! \n")
 
     print(
         "Your Results are saved in: {0}\nPlease remember the folder name below, you need this name to do the prediction only task:\n{1}".format(
@@ -362,7 +392,7 @@ def parse_arguments(parser):
                         help="The table describes relationship between compounds and modules. Each row is an intermediate metabolite and each column is metabolic module. For human model, please use cmMat_171.csv which is default. All candidate stoichiometry matrices are provided in /data/ folder.")
     parser.add_argument('--modules_genes_file_name', type=str, default='NA',
                         help="The json file contains genes for each module. We provide human and mouse two models in scFEA.")
-    parser.add_argument('--n_epoch_all', type=int, default=100,
+    parser.add_argument('--n_epoch_all', type=int, default=30,
                         help="The user defined early stop Epoch(the whole framework)")
     parser.add_argument('--imbalance_loss_limit_all', type=float, default=0.01,
                         help="The user defined early stop imbalance loss.")
@@ -378,15 +408,17 @@ def parse_arguments(parser):
     parser.add_argument('--load_weights_folder', type=str, default="NA")
 
     # parameters for scFEA
-    parser.add_argument('--n_epoch_scfea', type=int, default=200,
+    parser.add_argument('--n_epoch_scfea', type=int, default=100,
                         help="User defined Epoch for scFEA training.")
+    parser.add_argument('--batch_size_scfea', type=int, default=128,
+                        help="Batch size.")
 
     # parameters for bp_balance
-    parser.add_argument('--n_epoch_mpo', type=int, default=50,
+    parser.add_argument('--n_epoch_mpo', type=int, default=30,
                         help="User defined Epoch for Message Passing Optimizer.")
 
     # parameters for snn
-    parser.add_argument('--n_epoch_snn', type=int, default=300,
+    parser.add_argument('--n_epoch_snn', type=int, default=100,
                         help="User defined Epoch for Supervised Neural Network training.")
     parser.add_argument('--do_train_snn', type=int, default=1,
                         help="Train the SNN model, 0=False, 1=True.")
