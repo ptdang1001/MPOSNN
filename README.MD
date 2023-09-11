@@ -2,6 +2,9 @@
 
 ## Change Log
 
+### v0.62
+- update the massgage passing optimizer
+
 ### v0.61
 - Release metabolism-related network GGSL-V2
 - Optimize the prediction only step.
