@@ -60,7 +60,8 @@ def run_mpo(factors_nodes, samples_modules_input, args):
 
     samples_modules_mpo=pd.DataFrame.from_dict(samples_modules_mpo,orient='index')
     samples_modules_mpo.columns=samples_modules_input.columns
-    samples_modules_mpo.index=samples_modules_input.index
+    sample_names = samples_modules_input.index.values
+    samples_modules_mpo = samples_modules_mpo.loc[sample_names, :]
     return samples_modules_mpo
 
 
