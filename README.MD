@@ -3,7 +3,7 @@
 ## Change Log
 
 ### v0.62
-- update the massgage passing optimizer
+- update the message passing optimizer
 
 ### v0.61
 - Release metabolism-related network GGSL-V2
